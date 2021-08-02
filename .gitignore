@@ -3,6 +3,9 @@ bin-debug/
 bin-release/
 [Oo]bj/
 [Bb]in/
+.vs/
+x64/
+obj/
 
 # Other files and folders
 .settings/
