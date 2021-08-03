@@ -6,17 +6,18 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+
 /// @brief 摄像机
 class Camera
 {
 private:
 	float fov;
-	float znear, zfar;
-
+	float znear;
+	float zfar;
 	void updateViewMatrix()
 	{
-		glm::mat4 rotM = glm::mat4(1.0f);
-		glm::mat4 transM;
+		glm::mat4 rotM = glm::mat4(1.0f);	// 旋转矩阵
+		glm::mat4 transM;					// 移动矩阵
 
 		rotM = glm::rotate(rotM, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 		rotM = glm::rotate(rotM, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -36,9 +37,11 @@ private:
 		updated = true;
 	};
 public:
+	/// @brief 摄像机类型
 	enum CameraType
-	{ 
-		lookat, firstperson 
+	{
+		lookat,			// 约束相机(相机绕点观察)
+		firstperson		// 第一人称相机(以相机为点观察)
 	};
 
 	CameraType type = CameraType::lookat;
@@ -51,13 +54,15 @@ public:
 
 	bool updated = false;
 
-	struct
+	/// @brief 相机矩阵
+	struct SMatrice
 	{
-		glm::mat4 perspective;
-		glm::mat4 view;
+		glm::mat4 perspective;	// 透视
+		glm::mat4 view;			
 	} matrices;
 
-	struct
+	/// @brief 键盘按键
+	struct SKey
 	{
 		bool left = false;
 		bool right = false;
@@ -65,10 +70,12 @@ public:
 		bool down = false;
 	} keys;
 
+	/// @brief 是否移动
 	bool moving()
 	{
 		return keys.left || keys.right || keys.up || keys.down;
 	}
+
 
 	float getNearClip()
 	{
@@ -80,6 +87,7 @@ public:
 		return zfar;
 	}
 
+	/// @brief 设置透视
 	void setPerspective(float fov, float aspect, float znear, float zfar)
 	{
 		this->fov = fov;
