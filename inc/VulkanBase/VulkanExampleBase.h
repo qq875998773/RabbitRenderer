@@ -79,13 +79,13 @@ protected:
 	void windowResize();
 public: 
 	static std::vector<const char*> args;
-	bool prepared = false;
+	bool prepared = false;					// 准备渲染
 	uint32_t width = 1280;
 	uint32_t height = 720;
 	float frameTimer = 1.0f;
-	Camera camera;
+	Camera camera;							// 摄像机
 	glm::vec2 mousePos;
-	bool paused = false;
+	bool paused = false;					// 停止刷新
 	uint32_t lastFPS = 0;
 
 	struct Settings 

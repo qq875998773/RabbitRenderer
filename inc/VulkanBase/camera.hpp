@@ -2,12 +2,13 @@
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 
-/// @brief 摄像机
+/// @brief 摄像机类
 class Camera
 {
 private:
@@ -19,19 +20,21 @@ private:
 		glm::mat4 rotM = glm::mat4(1.0f);	// 旋转矩阵
 		glm::mat4 transM;					// 移动矩阵
 
+		// 设置相机在xyz坐标轴的旋转矩阵
 		rotM = glm::rotate(rotM, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 		rotM = glm::rotate(rotM, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 		rotM = glm::rotate(rotM, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
+		// 设置移动矩阵  /glm::mat4(1.0f)初始化一个单位矩阵
 		transM = glm::translate(glm::mat4(1.0f), position * glm::vec3(1.0f, 1.0f, -1.0f));
 
 		if (type == CameraType::firstperson)
 		{
-			matrices.view = rotM * transM;
+			matrices.view = rotM * transM; // 第一人称 先旋转再移动
 		}
 		else
 		{
-			matrices.view = transM * rotM;
+			matrices.view = transM * rotM; // 约束相机 先移动再旋转
 		}
 
 		updated = true;
@@ -44,30 +47,31 @@ public:
 		firstperson		// 第一人称相机(以相机为点观察)
 	};
 
+	// 默认约束相机
 	CameraType type = CameraType::lookat;
 
 	glm::vec3 rotation = glm::vec3();
 	glm::vec3 position = glm::vec3();
 
-	float rotationSpeed = 1.0f;
-	float movementSpeed = 1.0f;
+	float rotationSpeed = 1.0f;		// 旋转速度
+	float movementSpeed = 1.0f;		// 移动速度
 
-	bool updated = false;
+	bool updated = false;	// 是否刷新
 
 	/// @brief 相机矩阵
 	struct SMatrice
 	{
 		glm::mat4 perspective;	// 透视
-		glm::mat4 view;			
+		glm::mat4 view;	
 	} matrices;
 
 	/// @brief 键盘按键
 	struct SKey
 	{
-		bool left = false;
-		bool right = false;
-		bool up = false;
-		bool down = false;
+		bool left	= false;
+		bool right	= false;
+		bool up		= false;
+		bool down	= false;
 	} keys;
 
 	/// @brief 是否移动
@@ -131,6 +135,8 @@ public:
 		updateViewMatrix();
 	}
 
+	/// @brief 更新摄像机
+	/// @param [in ] deltaTime 增量时间
 	void update(float deltaTime)
 	{
 		updated = false;
@@ -168,8 +174,7 @@ public:
 		}
 	};
 
-	// Update camera passing separate axis data (gamepad)
-	// Returns true if view or position has been changed
+	// 更新摄像机
 	bool updatePad(glm::vec2 axisLeft, glm::vec2 axisRight, float deltaTime)
 	{
 		bool retVal = false;
@@ -191,7 +196,7 @@ public:
 			float moveSpeed = deltaTime * movementSpeed * 2.0f;
 			float rotSpeed = deltaTime * rotationSpeed * 50.0f;
 
-			// Move
+			// 移动
 			if (fabsf(axisLeft.y) > deadZone)
 			{
 				float pos = (fabsf(axisLeft.y) - deadZone) / range;
@@ -205,7 +210,7 @@ public:
 				retVal = true;
 			}
 
-			// Rotate
+			// 旋转
 			if (fabsf(axisRight.x) > deadZone)
 			{
 				float pos = (fabsf(axisRight.x) - deadZone) / range;

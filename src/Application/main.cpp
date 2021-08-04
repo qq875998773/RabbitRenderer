@@ -7,7 +7,6 @@
 #include <map>
 #include "algorithm"
 
-
 #include <vulkan/vulkan.h>
 #include "VulkanExampleBase.h"
 #include "VulkanTexture.hpp"
@@ -17,6 +16,7 @@
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -608,7 +608,6 @@ public:
 				};
 
 				// TODO: glTF specs states that metallic roughness should be preferred, even if specular glosiness is present
-
 				if (material.pbrWorkflows.metallicRoughness)
 				{
 					if (material.baseColorTexture)
@@ -1751,8 +1750,8 @@ public:
 	{
 		VulkanExampleBase::prepare();
 
+		// …Ë÷√œ‡ª˙
 		camera.type = Camera::CameraType::lookat;
-
 		camera.setPerspective(45.0f, (float)width / (float)height, 0.1f, 256.0f);
 		camera.rotationSpeed = 0.25f;
 		camera.movementSpeed = 0.1f;

@@ -260,6 +260,7 @@ void VulkanExampleBase::prepare()
 	setupFrameBuffer();
 }
 
+// 渲染帧
 void VulkanExampleBase::renderFrame()
 {
 	auto tStart = std::chrono::high_resolution_clock::now();
@@ -593,26 +594,31 @@ HWND VulkanExampleBase::setupWindow(HINSTANCE hinstance, WNDPROC wndproc)
 	return window;
 }
 
+/// @brief 消息处理
+/// @param [in ] hWnd 窗口句柄
+/// @param [in ] uMsg 接收的信息
+/// @param [in ] wParam 键盘参数
+/// @param [in ] lParam 鼠标参数
 void VulkanExampleBase::handleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-	case WM_CLOSE:
+	case WM_CLOSE:						// 关闭
 		prepared = false;
-		DestroyWindow(hWnd);
-		PostQuitMessage(0);
+		DestroyWindow(hWnd);			// 消除指定句柄的窗口
+		PostQuitMessage(0);				// 退出程序
 		break;
-	case WM_PAINT:
-		ValidateRect(window, NULL);
+	case WM_PAINT:						// 更新窗体(当窗体被部分覆盖或者大小最大化最小化时发送此消息给windows)
+		ValidateRect(window, NULL);		// 更新指定窗口的无效矩形区域，使之有效.
 		break;
-	case WM_KEYDOWN:
-		switch (wParam)
+	case WM_KEYDOWN:					// 键盘按下
+		switch (wParam)					
 		{
-		case KEY_P:
-			paused = !paused;
+		case KEY_P:						
+			paused = !paused;			// 更改刷新状态	
 			break;
 		case KEY_ESCAPE:
-			PostQuitMessage(0);
+			PostQuitMessage(0);			// 退出程序
 			break;
 		}
 
@@ -636,7 +642,7 @@ void VulkanExampleBase::handleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 		}
 
 		break;
-	case WM_KEYUP:
+	case WM_KEYUP:						// 鼠标抬起
 		if (camera.firstperson)
 		{
 			switch (wParam)
