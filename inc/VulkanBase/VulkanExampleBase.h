@@ -109,9 +109,9 @@ protected:
 public: 
 	static std::vector<const char*>			args;
 	bool									prepared = false;		// 准备渲染
-	uint32_t								width = 1280;
-	uint32_t								height = 720;
-	float									frameTimer = 1.0f;
+	uint32_t								width = 1280;			// 窗口宽
+	uint32_t								height = 720;			// 窗口高
+	float									frameTimer = 1.0f;		// 帧时间
 	Camera									camera;					// 摄像机
 	glm::vec2								mousePos;
 	bool									paused = false;			// 停止刷新
