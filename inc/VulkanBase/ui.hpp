@@ -6,7 +6,7 @@
 
 #include "vulkan/vulkan.h"
 #include "imgui/imgui.h"
-#include "VulkanDevice.hpp"
+#include "VulkanDevice.h"
 #include "VulkanUtils.hpp"
 #include "VulkanTexture.hpp"
 
@@ -34,7 +34,7 @@ public:
 		glm::vec2 translate;
 	} pushConstBlock;
 
-	UI(vks::VulkanDevice *vulkanDevice, VkRenderPass renderPass, VkQueue queue, VkPipelineCache pipelineCache, VkSampleCountFlagBits multiSampleCount) 
+	UI(VulkanDevice *vulkanDevice, VkRenderPass renderPass, VkQueue queue, VkPipelineCache pipelineCache, VkSampleCountFlagBits multiSampleCount) 
 	{
 
 		this->device = vulkanDevice->logicalDevice;

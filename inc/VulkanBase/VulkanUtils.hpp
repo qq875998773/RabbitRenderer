@@ -7,7 +7,7 @@
 #include <string>
 #include <map>
 #include "vulkan/vulkan.h"
-#include "VulkanDevice.hpp"
+#include "VulkanDevice.h"
 
 /// @brief Vulkan»º³åÇø¶ÔÏó
 struct Buffer 
@@ -18,10 +18,10 @@ struct Buffer
 	VkDescriptorBufferInfo descriptor;
 	int32_t count = 0;
 	void *mapped = nullptr;
-	void create(vks::VulkanDevice *device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, bool map = true) 
+	void create(VulkanDevice *device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, bool map = true) 
 	{
 		this->device = device->logicalDevice;
-		device->createBuffer(usageFlags, memoryPropertyFlags, size, &buffer, &memory);
+		device->CreateBuffer(usageFlags, memoryPropertyFlags, size, &buffer, &memory);
 		descriptor = { buffer, 0, size };
 		if (map) 
 		{

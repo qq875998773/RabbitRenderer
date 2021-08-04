@@ -19,6 +19,12 @@
     <ClCompile Include="..\..\ThirdParty\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -29,7 +35,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\VulkanBase\camera.hpp">
+    <ClInclude Include="..\..\inc\VulkanBase\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\VulkanBase\keycodes.hpp">
@@ -41,7 +47,7 @@
     <ClInclude Include="..\..\inc\VulkanBase\ui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.hpp">
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\VulkanBase\VulkanExampleBase.h">

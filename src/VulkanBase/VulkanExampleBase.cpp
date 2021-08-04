@@ -270,7 +270,7 @@ void VulkanExampleBase::renderFrame()
 	auto tEnd = std::chrono::high_resolution_clock::now();
 	auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count();
 	frameTimer = (float)tDiff / 1000.0f;
-	camera.update(frameTimer);
+	camera.Update(frameTimer);
 	fpsTimer += (float)tDiff;
 	if (fpsTimer > 1000.0f) 
 	{
@@ -349,7 +349,7 @@ VulkanExampleBase::VulkanExampleBase()
 
 VulkanExampleBase::~VulkanExampleBase()
 {
-	// Clean up Vulkan resources
+	// 清理Vulkan资源
 	swapChain.cleanup();
 	vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 	vkDestroyRenderPass(device, renderPass, nullptr);
@@ -451,14 +451,14 @@ void VulkanExampleBase::initVulkan()
 	/*
 		Device creation
 	*/
-	vulkanDevice = new vks::VulkanDevice(physicalDevice);
+	vulkanDevice = new VulkanDevice(physicalDevice);
 	VkPhysicalDeviceFeatures enabledFeatures{};
 	if (deviceFeatures.samplerAnisotropy) 
 	{
 		enabledFeatures.samplerAnisotropy = VK_TRUE;
 	}
 	std::vector<const char*> enabledExtensions{};
-	VkResult res = vulkanDevice->createLogicalDevice(enabledFeatures, enabledExtensions);
+	VkResult res = vulkanDevice->CreateLogicalDevice(enabledFeatures, enabledExtensions);
 	if (res != VK_SUCCESS) 
 	{
 		std::cerr << "Could not create Vulkan device!" << std::endl;
@@ -621,8 +621,8 @@ void VulkanExampleBase::handleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 			PostQuitMessage(0);			// 退出程序
 			break;
 		}
-
-		if (camera.firstperson)
+		
+		if (camera.type == CameraType::firstperson)
 		{
 			switch (wParam)
 			{
@@ -643,7 +643,7 @@ void VulkanExampleBase::handleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 
 		break;
 	case WM_KEYUP:						// 鼠标抬起
-		if (camera.firstperson)
+		if (camera.type == CameraType::firstperson)
 		{
 			switch (wParam)
 			{
@@ -686,7 +686,7 @@ void VulkanExampleBase::handleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 	case WM_MOUSEWHEEL:
 	{
 		short wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-		camera.translate(glm::vec3(0.0f, 0.0f, -(float)wheelDelta * 0.005f * camera.movementSpeed));
+		camera.Translate(glm::vec3(0.0f, 0.0f, -(float)wheelDelta * 0.005f * camera.movementSpeed));
 		break;
 	}
 	case WM_MOUSEMOVE:
@@ -748,9 +748,9 @@ void VulkanExampleBase::setupFrameBuffer()
 		memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		memAllocInfo.allocationSize = memReqs.size;
 		VkBool32 lazyMemTypePresent;
-		memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT, &lazyMemTypePresent);
+		memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT, &lazyMemTypePresent);
 		if (!lazyMemTypePresent) {
-			memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+			memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		}
 		VK_CHECK_RESULT(vkAllocateMemory(device, &memAllocInfo, nullptr, &multisampleTarget.color.memory));
 		vkBindImageMemory(device, multisampleTarget.color.image, multisampleTarget.color.memory, 0);
@@ -788,9 +788,9 @@ void VulkanExampleBase::setupFrameBuffer()
 		vkGetImageMemoryRequirements(device, multisampleTarget.depth.image, &memReqs);
 		memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		memAllocInfo.allocationSize = memReqs.size;
-		memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT, &lazyMemTypePresent);
+		memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT, &lazyMemTypePresent);
 		if (!lazyMemTypePresent) {
-			memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+			memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		}
 		VK_CHECK_RESULT(vkAllocateMemory(device, &memAllocInfo, nullptr, &multisampleTarget.depth.memory));
 		vkBindImageMemory(device, multisampleTarget.depth.image, multisampleTarget.depth.memory, 0);
@@ -848,7 +848,7 @@ void VulkanExampleBase::setupFrameBuffer()
 	VK_CHECK_RESULT(vkCreateImage(device, &image, nullptr, &depthStencil.image));
 	vkGetImageMemoryRequirements(device, depthStencil.image, &memReqs);
 	mem_alloc.allocationSize = memReqs.size;
-	mem_alloc.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	mem_alloc.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 	VK_CHECK_RESULT(vkAllocateMemory(device, &mem_alloc, nullptr, &depthStencil.mem));
 	VK_CHECK_RESULT(vkBindImageMemory(device, depthStencil.image, depthStencil.mem, 0));
 
@@ -927,7 +927,7 @@ void VulkanExampleBase::windowResize()
 	setupFrameBuffer();
 	vkDeviceWaitIdle(device);
 
-	camera.updateAspectRatio((float)width / (float)height);
+	camera.UpdateAspectRatio((float)width / (float)height);
 	windowResized();
 
 	prepared = true;
@@ -955,15 +955,15 @@ void VulkanExampleBase::handleMouseMove(int32_t x, int32_t y)
 
 	if (mouseButtons.left) 
 	{
-		camera.rotate(glm::vec3(dy * camera.rotationSpeed, -dx * camera.rotationSpeed, 0.0f));
+		camera.Rotate(glm::vec3(dy * camera.rotationSpeed, -dx * camera.rotationSpeed, 0.0f));
 	}
 	if (mouseButtons.right) 
 	{
-		camera.translate(glm::vec3(-0.0f, 0.0f, dy * .005f * camera.movementSpeed));
+		camera.Translate(glm::vec3(-0.0f, 0.0f, dy * .005f * camera.movementSpeed));
 	}
 	if (mouseButtons.middle) 
 	{
-		camera.translate(glm::vec3(-dx * 0.01f, -dy * 0.01f, 0.0f));
+		camera.Translate(glm::vec3(-dx * 0.01f, -dy * 0.01f, 0.0f));
 	}
 	mousePos = glm::vec2((float)x, (float)y);
 }

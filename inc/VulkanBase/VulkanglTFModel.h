@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "vulkan/vulkan.h"
-#include "VulkanDevice.hpp"
+#include "VulkanDevice.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -48,7 +48,7 @@ namespace vkglTF
 
 	struct Texture 
 	{
-		vks::VulkanDevice *device;
+		VulkanDevice *device;
 		VkImage image;
 		VkImageLayout imageLayout;
 		VkDeviceMemory deviceMemory;
@@ -61,7 +61,7 @@ namespace vkglTF
 		void updateDescriptor();
 		void destroy();
 		// Load a texture from a glTF image (stored as vector of chars loaded via stb_image) and generate a full mip chaing for it
-		void fromglTfImage(tinygltf::Image& gltfimage, TextureSampler textureSampler, vks::VulkanDevice* device, VkQueue copyQueue);
+		void fromglTfImage(tinygltf::Image& gltfimage, TextureSampler textureSampler, VulkanDevice* device, VkQueue copyQueue);
 	};
 
 	struct Material 
@@ -116,7 +116,7 @@ namespace vkglTF
 
 	struct Mesh 
 	{
-		vks::VulkanDevice *device;
+		VulkanDevice *device;
 		std::vector<Primitive*> primitives;
 		BoundingBox bb;
 		BoundingBox aabb;
@@ -134,7 +134,7 @@ namespace vkglTF
 			glm::mat4 jointMatrix[MAX_NUM_JOINTS]{};
 			float jointcount{ 0 };
 		} uniformBlock;
-		Mesh(vks::VulkanDevice* device, glm::mat4 matrix);
+		Mesh(VulkanDevice* device, glm::mat4 matrix);
 		~Mesh();
 		void setBoundingBox(glm::vec3 min, glm::vec3 max);
 	};
@@ -196,7 +196,7 @@ namespace vkglTF
 	struct Model 
 	{
 
-		vks::VulkanDevice *device;
+		VulkanDevice *device;
 
 		struct Vertex 
 		{
@@ -242,13 +242,13 @@ namespace vkglTF
 		void destroy(VkDevice device);
 		void loadNode(vkglTF::Node* parent, const tinygltf::Node& node, uint32_t nodeIndex, const tinygltf::Model& model, std::vector<uint32_t>& indexBuffer, std::vector<Vertex>& vertexBuffer, float globalscale);
 		void loadSkins(tinygltf::Model& gltfModel);
-		void loadTextures(tinygltf::Model& gltfModel, vks::VulkanDevice* device, VkQueue transferQueue);
+		void loadTextures(tinygltf::Model& gltfModel, VulkanDevice* device, VkQueue transferQueue);
 		VkSamplerAddressMode getVkWrapMode(int32_t wrapMode);
 		VkFilter getVkFilterMode(int32_t filterMode);
 		void loadTextureSamplers(tinygltf::Model& gltfModel);
 		void loadMaterials(tinygltf::Model& gltfModel);
 		void loadAnimations(tinygltf::Model& gltfModel);
-		void loadFromFile(std::string filename, vks::VulkanDevice* device, VkQueue transferQueue, float scale = 1.0f);
+		void loadFromFile(std::string filename, VulkanDevice* device, VkQueue transferQueue, float scale = 1.0f);
 		void drawNode(Node* node, VkCommandBuffer commandBuffer);
 		void draw(VkCommandBuffer commandBuffer);
 		void calculateBoundingBox(Node* node, Node* parent);

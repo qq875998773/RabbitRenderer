@@ -366,8 +366,8 @@ public:
 		animationIndex = 0;
 		animationTimer = 0.0f;
 		models.scene.loadFromFile(filename, vulkanDevice, queue);
-		camera.setPosition({ 0.0f, 0.0f, 1.0f });
-		camera.setRotation({ 0.0f, 0.0f, 0.0f });
+		camera.SetPosition({ 0.0f, 0.0f, 1.0f });
+		camera.SetRotation({ 0.0f, 0.0f, 0.0f });
 	}
 
 	void loadEnvironment(std::string filename)
@@ -882,7 +882,7 @@ public:
 		VkMemoryAllocateInfo memAllocInfo{};
 		memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		memAllocInfo.allocationSize = memReqs.size;
-		memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		VK_CHECK_RESULT(vkAllocateMemory(device, &memAllocInfo, nullptr, &textures.lutBrdf.deviceMemory));
 		VK_CHECK_RESULT(vkBindImageMemory(device, textures.lutBrdf.image, textures.lutBrdf.deviceMemory, 0));
 
@@ -1077,7 +1077,7 @@ public:
 		renderPassBeginInfo.pClearValues = clearValues;
 		renderPassBeginInfo.framebuffer = framebuffer;
 
-		VkCommandBuffer cmdBuf = vulkanDevice->createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
+		VkCommandBuffer cmdBuf = vulkanDevice->CreateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
 		vkCmdBeginRenderPass(cmdBuf, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		VkViewport viewport{};
@@ -1095,7 +1095,7 @@ public:
 		vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 		vkCmdDraw(cmdBuf, 3, 1, 0, 0);
 		vkCmdEndRenderPass(cmdBuf);
-		vulkanDevice->flushCommandBuffer(cmdBuf, queue);
+		vulkanDevice->FlushCommandBuffer(cmdBuf, queue);
 
 		vkQueueWaitIdle(queue);
 
@@ -1169,7 +1169,7 @@ public:
 				VkMemoryAllocateInfo memAllocInfo{};
 				memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 				memAllocInfo.allocationSize = memReqs.size;
-				memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+				memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 				VK_CHECK_RESULT(vkAllocateMemory(device, &memAllocInfo, nullptr, &cubemap.deviceMemory));
 				VK_CHECK_RESULT(vkBindImageMemory(device, cubemap.image, cubemap.deviceMemory, 0));
 
@@ -1279,7 +1279,7 @@ public:
 				VkMemoryAllocateInfo memAllocInfo{};
 				memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 				memAllocInfo.allocationSize = memReqs.size;
-				memAllocInfo.memoryTypeIndex = vulkanDevice->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+				memAllocInfo.memoryTypeIndex = vulkanDevice->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 				VK_CHECK_RESULT(vkAllocateMemory(device, &memAllocInfo, nullptr, &offscreen.memory));
 				VK_CHECK_RESULT(vkBindImageMemory(device, offscreen.image, offscreen.memory, 0));
 
@@ -1309,7 +1309,7 @@ public:
 				framebufferCI.layers = 1;
 				VK_CHECK_RESULT(vkCreateFramebuffer(device, &framebufferCI, nullptr, &offscreen.framebuffer));
 
-				VkCommandBuffer layoutCmd = vulkanDevice->createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
+				VkCommandBuffer layoutCmd = vulkanDevice->CreateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
 				VkImageMemoryBarrier imageMemoryBarrier{};
 				imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 				imageMemoryBarrier.image = offscreen.image;
@@ -1319,7 +1319,7 @@ public:
 				imageMemoryBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 				imageMemoryBarrier.subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 				vkCmdPipelineBarrier(layoutCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-				vulkanDevice->flushCommandBuffer(layoutCmd, queue, true);
+				vulkanDevice->FlushCommandBuffer(layoutCmd, queue, true);
 			}
 
 			// Descriptors
@@ -1508,7 +1508,7 @@ public:
 				glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
 			};
 
-			VkCommandBuffer cmdBuf = vulkanDevice->createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, false);
+			VkCommandBuffer cmdBuf = vulkanDevice->CreateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, false);
 
 			VkViewport viewport{};
 			viewport.width = (float)dim;
@@ -1528,7 +1528,7 @@ public:
 
 			// Change image layout for all cubemap faces to transfer destination
 			{
-				vulkanDevice->beginCommandBuffer(cmdBuf);
+				vulkanDevice->BeginCommandBuffer(cmdBuf);
 				VkImageMemoryBarrier imageMemoryBarrier{};
 				imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 				imageMemoryBarrier.image = cubemap.image;
@@ -1538,14 +1538,14 @@ public:
 				imageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 				imageMemoryBarrier.subresourceRange = subresourceRange;
 				vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-				vulkanDevice->flushCommandBuffer(cmdBuf, queue, false);
+				vulkanDevice->FlushCommandBuffer(cmdBuf, queue, false);
 			}
 
 			for (uint32_t m = 0; m < numMips; m++) 
 			{
 				for (uint32_t f = 0; f < 6; f++) 
 				{
-					vulkanDevice->beginCommandBuffer(cmdBuf);
+					vulkanDevice->BeginCommandBuffer(cmdBuf);
 
 					viewport.width = static_cast<float>(dim * std::pow(0.5f, m));
 					viewport.height = static_cast<float>(dim * std::pow(0.5f, m));
@@ -1636,12 +1636,12 @@ public:
 						vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 					}
 
-					vulkanDevice->flushCommandBuffer(cmdBuf, queue, false);
+					vulkanDevice->FlushCommandBuffer(cmdBuf, queue, false);
 				}
 			}
 
 			{
-				vulkanDevice->beginCommandBuffer(cmdBuf);
+				vulkanDevice->BeginCommandBuffer(cmdBuf);
 				VkImageMemoryBarrier imageMemoryBarrier{};
 				imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 				imageMemoryBarrier.image = cubemap.image;
@@ -1651,7 +1651,7 @@ public:
 				imageMemoryBarrier.dstAccessMask = VK_ACCESS_HOST_WRITE_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
 				imageMemoryBarrier.subresourceRange = subresourceRange;
 				vkCmdPipelineBarrier(cmdBuf, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-				vulkanDevice->flushCommandBuffer(cmdBuf, queue, false);
+				vulkanDevice->FlushCommandBuffer(cmdBuf, queue, false);
 			}
 
 
@@ -1751,12 +1751,12 @@ public:
 		VulkanExampleBase::prepare();
 
 		// …Ë÷√œ‡ª˙
-		camera.type = Camera::CameraType::lookat;
-		camera.setPerspective(45.0f, (float)width / (float)height, 0.1f, 256.0f);
+		camera.type = CameraType::lookat;
+		camera.SetPerspective(45.0f, (float)width / (float)height, 0.1f, 256.0f);
 		camera.rotationSpeed = 0.25f;
 		camera.movementSpeed = 0.1f;
-		camera.setPosition({ 0.0f, 0.0f, 1.0f });
-		camera.setRotation({ 0.0f, 0.0f, 0.0f });
+		camera.SetPosition({ 0.0f, 0.0f, 1.0f });
+		camera.SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		waitFences.resize(renderAhead);
 		presentCompleteSemaphores.resize(renderAhead);
