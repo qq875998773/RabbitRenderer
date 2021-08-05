@@ -20,7 +20,7 @@
 #include "tiny_gltf.h"
 
 
-// Changing this value here also requires changing it in the vertex shader
+// 在此处更改此值还需在顶点着色器中进行更改
 #define MAX_NUM_JOINTS 128u
 
 namespace vkglTF

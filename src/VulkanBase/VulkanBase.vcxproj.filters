@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="VulkanExampleBase.cpp">
+    <ClCompile Include="VulkanBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VulkanglTFModel.cpp">
@@ -23,6 +23,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VulkanDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanSwapChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,13 +53,13 @@
     <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanExampleBase.h">
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\VulkanBase\VulkanglTFModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.hpp">
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.hpp">
