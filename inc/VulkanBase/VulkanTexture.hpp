@@ -7,36 +7,37 @@
 
 #include "vulkan/vulkan.h"
 #include "macros.h"
-#include "VulkanDevice.hpp"
+#include "VulkanDevice.h"
 
 #include <gli/gli.hpp>
 
-// 纹理加载
-
 namespace vks
 {
-	class Texture 
+	/// @brief vulkan纹理
+	class VulkanTexture 
 	{
 	public:
-		vks::VulkanDevice *device;
-		VkImage image = VK_NULL_HANDLE;
-		VkImageLayout imageLayout;
-		VkDeviceMemory deviceMemory;
-		VkImageView view;
-		uint32_t width, height;
-		uint32_t mipLevels;
-		uint32_t layerCount;
-		VkDescriptorImageInfo descriptor;
-		VkSampler sampler;
+		VulkanDevice*				device;
+		VkImage						image = VK_NULL_HANDLE;
+		VkImageLayout				imageLayout;
+		VkDeviceMemory				deviceMemory;
+		VkImageView					view;
+		uint32_t					width, height;
+		uint32_t					mipLevels;
+		uint32_t					layerCount;
+		VkDescriptorImageInfo		descriptor;
+		VkSampler					sampler;
 
-		void updateDescriptor()
+		/// @brief 更新描述符
+		void UpdateDescriptor()
 		{
 			descriptor.sampler = sampler;
 			descriptor.imageView = view;
 			descriptor.imageLayout = imageLayout;
 		}
 
-		void destroy()
+		/// @brief 销毁
+		void Destroy()
 		{
 			vkDestroyImageView(device->logicalDevice, view, nullptr);
 			vkDestroyImage(device->logicalDevice, image, nullptr);
@@ -48,13 +49,21 @@ namespace vks
 		}
 	};
 
-	class Texture2D : public Texture 
+	/// @brief vulkan2d纹理
+	class VulkanTexture2D : public VulkanTexture
 	{
 	public:
-		void loadFromFile(
+		/// @brief 从文件加载
+		/// @param [in ] filename 文件路径
+		/// @param [in ] format 格式
+		/// @param [in ] device 物理设备指针
+		/// @param [in ] copyQueue 拷贝队列
+		/// @param [in ] imageUsageFlags 图像使用标志
+		/// @param [in ] imageLayout 图像布局
+		void LoadFromFile(
 			std::string filename, 
 			VkFormat format,
-			vks::VulkanDevice *device,
+			VulkanDevice *device,
 			VkQueue copyQueue,
 			VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_SAMPLED_BIT,
 			VkImageLayout imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
@@ -67,7 +76,7 @@ namespace vks
 			height = static_cast<uint32_t>(tex2D[0].extent().y);
 			mipLevels = static_cast<uint32_t>(tex2D.levels());
 
-			// Get device properites for the requested texture format
+			// 获取所请求纹理格式的设备属性
 			VkFormatProperties formatProperties;
 			vkGetPhysicalDeviceFormatProperties(device->physicalDevice, format, &formatProperties);
 
@@ -75,39 +84,39 @@ namespace vks
 			memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 			VkMemoryRequirements memReqs;
 
-			// Use a separate command buffer for texture loading
-			VkCommandBuffer copyCmd = device->createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
+			// 使用单独的命令缓冲区加载纹理
+			VkCommandBuffer copyCmd = device->CreateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
 
-			// Create a host-visible staging buffer that contains the raw image data
+			// 创建包含原始图像数据的主机可见暂存缓冲区
 			VkBuffer stagingBuffer;
 			VkDeviceMemory stagingMemory;
 
 			VkBufferCreateInfo bufferCreateInfo{};
 			bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 			bufferCreateInfo.size = tex2D.size();
-			// This buffer is used as a transfer source for the buffer copy
+			// 此缓冲区用作缓冲区副本的传输源
 			bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 			bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 			VK_CHECK_RESULT(vkCreateBuffer(device->logicalDevice, &bufferCreateInfo, nullptr, &stagingBuffer));
 
-			// Get memory requirements for the staging buffer (alignment, memory type bits)
+			// 获取暂存缓冲区的内存需求(对齐、内存类型位)
 			vkGetBufferMemoryRequirements(device->logicalDevice, stagingBuffer, &memReqs);
 
 			memAllocInfo.allocationSize = memReqs.size;
-			// Get memory type index for a host visible buffer
-			memAllocInfo.memoryTypeIndex = device->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+			// 获取主机可见缓冲区的内存类型索引
+			memAllocInfo.memoryTypeIndex = device->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 			VK_CHECK_RESULT(vkAllocateMemory(device->logicalDevice, &memAllocInfo, nullptr, &stagingMemory));
 			VK_CHECK_RESULT(vkBindBufferMemory(device->logicalDevice, stagingBuffer, stagingMemory, 0));
 
-			// Copy texture data into staging buffer
+			// 将纹理数据复制到暂存缓冲区
 			uint8_t *data;
 			VK_CHECK_RESULT(vkMapMemory(device->logicalDevice, stagingMemory, 0, memReqs.size, 0, (void **)&data));
 			memcpy(data, tex2D.data(), tex2D.size());
 			vkUnmapMemory(device->logicalDevice, stagingMemory);
 
-			// Setup buffer copy regions for each mip level
+			// 为每个mip级别设置缓冲区复制区域
 			std::vector<VkBufferImageCopy> bufferCopyRegions;
 			uint32_t offset = 0;
 
@@ -128,7 +137,7 @@ namespace vks
 				offset += static_cast<uint32_t>(tex2D[i].size());
 			}
 
-			// Create optimal tiled target image
+			// 创建最佳平铺目标图像
 			VkImageCreateInfo imageCreateInfo{};
 			imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 			imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -141,7 +150,7 @@ namespace vks
 			imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 			imageCreateInfo.extent = { width, height, 1 };
 			imageCreateInfo.usage = imageUsageFlags;
-			// Ensure that the TRANSFER_DST bit is set for staging
+			// 确保为暂存设置了TRANSFER_DST位
 			if (!(imageCreateInfo.usage & VK_IMAGE_USAGE_TRANSFER_DST_BIT))
 			{
 				imageCreateInfo.usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
@@ -152,7 +161,7 @@ namespace vks
 
 			memAllocInfo.allocationSize = memReqs.size;
 
-			memAllocInfo.memoryTypeIndex = device->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+			memAllocInfo.memoryTypeIndex = device->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 			VK_CHECK_RESULT(vkAllocateMemory(device->logicalDevice, &memAllocInfo, nullptr, &deviceMemory));
 			VK_CHECK_RESULT(vkBindImageMemory(device->logicalDevice, image, deviceMemory, 0));
 
@@ -162,8 +171,8 @@ namespace vks
 			subresourceRange.levelCount = mipLevels;
 			subresourceRange.layerCount = 1;
 
-			// Image barrier for optimal image (target)
-			// Optimal image will be used as destination for the copy
+			// 最优图像的图像屏障
+			// 最优图像将用作副本的目标
 			{
 				VkImageMemoryBarrier imageMemoryBarrier{};
 				imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -176,16 +185,10 @@ namespace vks
 				vkCmdPipelineBarrier(copyCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 			}
 
-			// Copy mip levels from staging buffer
-			vkCmdCopyBufferToImage(
-				copyCmd,
-				stagingBuffer,
-				image,
-				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-				static_cast<uint32_t>(bufferCopyRegions.size()),
-				bufferCopyRegions.data());
+			// 从暂存缓冲区复制mip级别
+			vkCmdCopyBufferToImage(copyCmd, stagingBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, static_cast<uint32_t>(bufferCopyRegions.size()), bufferCopyRegions.data());
 
-			// Change texture image layout to shader read after all mip levels have been copied
+			// 复制所有mip级别后，将纹理图像布局更改为"着色器读取"
 			this->imageLayout = imageLayout;
 			{
 				VkImageMemoryBarrier imageMemoryBarrier{};
@@ -199,9 +202,9 @@ namespace vks
 				vkCmdPipelineBarrier(copyCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 			}
 
-			device->flushCommandBuffer(copyCmd, copyQueue);
+			device->FlushCommandBuffer(copyCmd, copyQueue);
 
-			// Clean up staging resources
+			// 清理暂存资源
 			vkFreeMemory(device->logicalDevice, stagingMemory, nullptr);
 			vkDestroyBuffer(device->logicalDevice, stagingBuffer, nullptr);
 
@@ -232,16 +235,25 @@ namespace vks
 			viewCreateInfo.image = image;
 			VK_CHECK_RESULT(vkCreateImageView(device->logicalDevice, &viewCreateInfo, nullptr, &view));
 
-			updateDescriptor();
+			UpdateDescriptor();
 		}
 
-		void loadFromBuffer(
+		/// @brief 从缓冲区加载
+		/// @param [in ] buffer 缓冲区
+		/// @param [in ] bufferSize 缓冲区大小
+		/// @param [in ] width 纹理宽
+		/// @param [in ] height 纹理高
+		/// @param [in ] device 物理设备指针
+		/// @param [in ] copyQueue 拷贝队列
+		/// @param [in ] imageUsageFlags 图像使用标志
+		/// @param [in ] imageLayout 图像布局
+		void LoadFromBuffer(
 			void* buffer,
 			VkDeviceSize bufferSize,
 			VkFormat format,
 			uint32_t width,
 			uint32_t height,
-			vks::VulkanDevice *device,
+			VulkanDevice *device,
 			VkQueue copyQueue,
 			VkFilter filter = VK_FILTER_LINEAR,
 			VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -250,40 +262,40 @@ namespace vks
 			assert(buffer);
 
 			this->device = device;
-			width = width;
-			height = height;
+			this->width = width;
+			this->height = height;
 			mipLevels = 1;
 
 			VkMemoryAllocateInfo memAllocInfo{};
 			memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 			VkMemoryRequirements memReqs;
-			// Use a separate command buffer for texture loading
-			VkCommandBuffer copyCmd = device->createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
+			// 使用单独的命令缓冲区加载纹理
+			VkCommandBuffer copyCmd = device->CreateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
 
-			// Create a host-visible staging buffer that contains the raw image data
+			// 创建包含原始图像数据的主机可见暂存缓冲区
 			VkBuffer stagingBuffer;
 			VkDeviceMemory stagingMemory;
 
 			VkBufferCreateInfo bufferCreateInfo{};
 			bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 			bufferCreateInfo.size = bufferSize;
-			// This buffer is used as a transfer source for the buffer copy
+			// 此缓冲区用作缓冲区副本的传输源
 			bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 			bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 			VK_CHECK_RESULT(vkCreateBuffer(device->logicalDevice, &bufferCreateInfo, nullptr, &stagingBuffer));
 
-			// Get memory requirements for the staging buffer (alignment, memory type bits)
+			// 获取暂存缓冲区的内存需求(对齐、内存类型位)
 			vkGetBufferMemoryRequirements(device->logicalDevice, stagingBuffer, &memReqs);
 
 			memAllocInfo.allocationSize = memReqs.size;
-			// Get memory type index for a host visible buffer
-			memAllocInfo.memoryTypeIndex = device->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+			// 获取主机可见缓冲区的内存类型索引
+			memAllocInfo.memoryTypeIndex = device->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 			VK_CHECK_RESULT(vkAllocateMemory(device->logicalDevice, &memAllocInfo, nullptr, &stagingMemory));
 			VK_CHECK_RESULT(vkBindBufferMemory(device->logicalDevice, stagingBuffer, stagingMemory, 0));
 
-			// Copy texture data into staging buffer
+			// 将纹理数据复制到暂存缓冲区
 			uint8_t *data;
 			VK_CHECK_RESULT(vkMapMemory(device->logicalDevice, stagingMemory, 0, memReqs.size, 0, (void **)&data));
 			memcpy(data, buffer, bufferSize);
@@ -299,7 +311,7 @@ namespace vks
 			bufferCopyRegion.imageExtent.depth = 1;
 			bufferCopyRegion.bufferOffset = 0;
 
-			// Create optimal tiled target image
+			// 创建最佳平铺目标图像
 			VkImageCreateInfo imageCreateInfo{};
 			imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 			imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -312,7 +324,7 @@ namespace vks
 			imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 			imageCreateInfo.extent = { width, height, 1 };
 			imageCreateInfo.usage = imageUsageFlags;
-			// Ensure that the TRANSFER_DST bit is set for staging
+			// 确保为暂存设置了TRANSFER_DST位
 			if (!(imageCreateInfo.usage & VK_IMAGE_USAGE_TRANSFER_DST_BIT))
 			{
 				imageCreateInfo.usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
@@ -323,7 +335,7 @@ namespace vks
 
 			memAllocInfo.allocationSize = memReqs.size;
 
-			memAllocInfo.memoryTypeIndex = device->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+			memAllocInfo.memoryTypeIndex = device->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 			VK_CHECK_RESULT(vkAllocateMemory(device->logicalDevice, &memAllocInfo, nullptr, &deviceMemory));
 			VK_CHECK_RESULT(vkBindImageMemory(device->logicalDevice, image, deviceMemory, 0));
 
@@ -345,13 +357,7 @@ namespace vks
 				vkCmdPipelineBarrier(copyCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 			}
 
-			vkCmdCopyBufferToImage(
-				copyCmd,
-				stagingBuffer,
-				image,
-				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-				1,
-				&bufferCopyRegion);
+			vkCmdCopyBufferToImage(copyCmd, stagingBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &bufferCopyRegion);
 
 			this->imageLayout = imageLayout;
 			{
@@ -366,13 +372,13 @@ namespace vks
 				vkCmdPipelineBarrier(copyCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 			}
 
-			device->flushCommandBuffer(copyCmd, copyQueue);
+			device->FlushCommandBuffer(copyCmd, copyQueue);
 
-			// Clean up staging resources
+			// 清理暂存资源
 			vkFreeMemory(device->logicalDevice, stagingMemory, nullptr);
 			vkDestroyBuffer(device->logicalDevice, stagingBuffer, nullptr);
 
-			// Create sampler
+			// 创建采样器
 			VkSamplerCreateInfo samplerCreateInfo = {};
 			samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 			samplerCreateInfo.magFilter = filter;
@@ -388,7 +394,7 @@ namespace vks
 			samplerCreateInfo.maxAnisotropy = 1.0f;
 			VK_CHECK_RESULT(vkCreateSampler(device->logicalDevice, &samplerCreateInfo, nullptr, &sampler));
 
-			// Create image view
+			// 创建图像视图
 			VkImageViewCreateInfo viewCreateInfo = {};
 			viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 			viewCreateInfo.pNext = NULL;
@@ -400,18 +406,19 @@ namespace vks
 			viewCreateInfo.image = image;
 			VK_CHECK_RESULT(vkCreateImageView(device->logicalDevice, &viewCreateInfo, nullptr, &view));
 
-			// Update descriptor image info member that can be used for setting up descriptor sets
-			updateDescriptor();
+			// 更新可用于设置描述符集的描述符图像信息成员
+			UpdateDescriptor();
 		}
 	};
 
-	class TextureCubeMap : public Texture 
+	class TextureCubeMap : public VulkanTexture 
 	{
 	public:
+		/// @brief 从文件加载
 		void loadFromFile(
 			std::string filename,
 			VkFormat format,
-			vks::VulkanDevice *device,
+			VulkanDevice *device,
 			VkQueue copyQueue,
 			VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_SAMPLED_BIT,
 			VkImageLayout imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
@@ -428,41 +435,43 @@ namespace vks
 			memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 			VkMemoryRequirements memReqs;
 
-			// Create a host-visible staging buffer that contains the raw image data
+			// 创建包含原始图像数据的主机可见暂存缓冲区
 			VkBuffer stagingBuffer;
 			VkDeviceMemory stagingMemory;
 
 			VkBufferCreateInfo bufferCreateInfo{};
 			bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 			bufferCreateInfo.size = texCube.size();
-			// This buffer is used as a transfer source for the buffer copy
+			// 此缓冲区用作缓冲区副本的传输源
 			bufferCreateInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 			bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 			VK_CHECK_RESULT(vkCreateBuffer(device->logicalDevice, &bufferCreateInfo, nullptr, &stagingBuffer));
 
-			// Get memory requirements for the staging buffer (alignment, memory type bits)
+			// 获取暂存缓冲区的内存需求（对齐、内存类型位）
 			vkGetBufferMemoryRequirements(device->logicalDevice, stagingBuffer, &memReqs);
 
 			memAllocInfo.allocationSize = memReqs.size;
-			// Get memory type index for a host visible buffer
-			memAllocInfo.memoryTypeIndex = device->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+			// 获取主机可见缓冲区的内存类型索引
+			memAllocInfo.memoryTypeIndex = device->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 			VK_CHECK_RESULT(vkAllocateMemory(device->logicalDevice, &memAllocInfo, nullptr, &stagingMemory));
 			VK_CHECK_RESULT(vkBindBufferMemory(device->logicalDevice, stagingBuffer, stagingMemory, 0));
 
-			// Copy texture data into staging buffer
-			uint8_t *data;
+			// 将纹理数据复制到暂存缓冲区
+			uint8_t* data;
 			VK_CHECK_RESULT(vkMapMemory(device->logicalDevice, stagingMemory, 0, memReqs.size, 0, (void **)&data));
 			memcpy(data, texCube.data(), texCube.size());
 			vkUnmapMemory(device->logicalDevice, stagingMemory);
 
-			// Setup buffer copy regions for each face including all of it's miplevels
+			// 为每个面设置缓冲区复制区域，包括其所有mip级别
 			std::vector<VkBufferImageCopy> bufferCopyRegions;
 			size_t offset = 0;
 
-			for (uint32_t face = 0; face < 6; face++) {
-				for (uint32_t level = 0; level < mipLevels; level++) {
+			for (uint32_t face = 0; face < 6; face++) 
+			{
+				for (uint32_t level = 0; level < mipLevels; level++) 
+				{
 					VkBufferImageCopy bufferCopyRegion = {};
 					bufferCopyRegion.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 					bufferCopyRegion.imageSubresource.mipLevel = level;
@@ -475,12 +484,12 @@ namespace vks
 
 					bufferCopyRegions.push_back(bufferCopyRegion);
 
-					// Increase offset into staging buffer for next level / face
+					// 增加下一层/面暂存缓冲区的偏移量
 					offset += texCube[face][level].size();
 				}
 			}
 
-			// Create optimal tiled target image
+			// 创建最佳平铺目标图像
 			VkImageCreateInfo imageCreateInfo{};
 			imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 			imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -492,31 +501,31 @@ namespace vks
 			imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 			imageCreateInfo.extent = { width, height, 1 };
 			imageCreateInfo.usage = imageUsageFlags;
-			// Ensure that the TRANSFER_DST bit is set for staging
-			if (!(imageCreateInfo.usage & VK_IMAGE_USAGE_TRANSFER_DST_BIT)) {
+			// 确保为暂存设置了TRANSFER_DST位
+			if (!(imageCreateInfo.usage & VK_IMAGE_USAGE_TRANSFER_DST_BIT)) 
+			{
 				imageCreateInfo.usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 			}
-			// Cube faces count as array layers in Vulkan
+			// 多维数据集面在Vulkan中计为阵列层
 			imageCreateInfo.arrayLayers = 6;
-			// This flag is required for cube map images
+			// 立方体贴图图像需要此标志
 			imageCreateInfo.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
-
 
 			VK_CHECK_RESULT(vkCreateImage(device->logicalDevice, &imageCreateInfo, nullptr, &image));
 
 			vkGetImageMemoryRequirements(device->logicalDevice, image, &memReqs);
 
 			memAllocInfo.allocationSize = memReqs.size;
-			memAllocInfo.memoryTypeIndex = device->getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+			memAllocInfo.memoryTypeIndex = device->GetMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 			VK_CHECK_RESULT(vkAllocateMemory(device->logicalDevice, &memAllocInfo, nullptr, &deviceMemory));
 			VK_CHECK_RESULT(vkBindImageMemory(device->logicalDevice, image, deviceMemory, 0));
 
-			// Use a separate command buffer for texture loading
-			VkCommandBuffer copyCmd = device->createCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
+			// 使用单独的命令缓冲区加载纹理
+			VkCommandBuffer copyCmd = device->CreateCommandBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, true);
 
-			// Image barrier for optimal image (target)
-			// Set initial layout for all array layers (faces) of the optimal (target) tiled texture
+			// 最佳图像的图像屏障
+			// 为最佳（目标）平铺纹理的所有阵列层（面）设置初始布局
 			VkImageSubresourceRange subresourceRange = {};
 			subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 			subresourceRange.baseMipLevel = 0;
@@ -535,16 +544,10 @@ namespace vks
 				vkCmdPipelineBarrier(copyCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 			}
 
-			// Copy the cube map faces from the staging buffer to the optimal tiled image
-			vkCmdCopyBufferToImage(
-				copyCmd,
-				stagingBuffer,
-				image,
-				VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-				static_cast<uint32_t>(bufferCopyRegions.size()),
-				bufferCopyRegions.data());
+			// 将立方体贴图面从暂存缓冲区复制到最佳平铺图像
+			vkCmdCopyBufferToImage(copyCmd, stagingBuffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, static_cast<uint32_t>(bufferCopyRegions.size()), bufferCopyRegions.data());
 
-			// Change texture image layout to shader read after all faces have been copied
+			// 复制所有面后，将纹理图像布局更改为“着色器读取”
 			this->imageLayout = imageLayout;
 			{
 				VkImageMemoryBarrier imageMemoryBarrier{};
@@ -558,9 +561,9 @@ namespace vks
 				vkCmdPipelineBarrier(copyCmd, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 			}
 
-			device->flushCommandBuffer(copyCmd, copyQueue);
+			device->FlushCommandBuffer(copyCmd, copyQueue);
 
-			// Create sampler
+			// 创建采样器
 			VkSamplerCreateInfo samplerCreateInfo{};
 			samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 			samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
@@ -578,7 +581,7 @@ namespace vks
 			samplerCreateInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
 			VK_CHECK_RESULT(vkCreateSampler(device->logicalDevice, &samplerCreateInfo, nullptr, &sampler));
 
-			// Create image view
+			// 创建图像视图
 			VkImageViewCreateInfo viewCreateInfo{};
 			viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 			viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
@@ -590,13 +593,12 @@ namespace vks
 			viewCreateInfo.image = image;
 			VK_CHECK_RESULT(vkCreateImageView(device->logicalDevice, &viewCreateInfo, nullptr, &view));
 
-			// Clean up staging resources
+			// 清理暂存资源
 			vkFreeMemory(device->logicalDevice, stagingMemory, nullptr);
 			vkDestroyBuffer(device->logicalDevice, stagingBuffer, nullptr);
 
-			// Update descriptor image info member that can be used for setting up descriptor sets
-			updateDescriptor();
+			// 更新可用于设置描述符集的描述符图像信息成员
+			UpdateDescriptor();
 		}
 	};
-
 }

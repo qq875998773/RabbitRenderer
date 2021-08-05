@@ -178,18 +178,21 @@
     <ClCompile Include="..\..\ThirdParty\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\ThirdParty\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\..\ThirdParty\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="VulkanExampleBase.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="VulkanDevice.cpp" />
+    <ClCompile Include="VulkanBase.cpp" />
     <ClCompile Include="VulkanglTFModel.cpp" />
+    <ClCompile Include="VulkanSwapChain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\VulkanBase\camera.hpp" />
+    <ClInclude Include="..\..\inc\VulkanBase\camera.h" />
     <ClInclude Include="..\..\inc\VulkanBase\keycodes.hpp" />
     <ClInclude Include="..\..\inc\VulkanBase\macros.h" />
     <ClInclude Include="..\..\inc\VulkanBase\ui.hpp" />
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.hpp" />
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanExampleBase.h" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.h" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanBase.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanglTFModel.h" />
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.hpp" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.hpp" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.hpp" />
   </ItemGroup>

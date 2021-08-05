@@ -6,7 +6,7 @@
 
 #include "vulkan/vulkan.h"
 #include "imgui/imgui.h"
-#include "VulkanDevice.hpp"
+#include "VulkanDevice.h"
 #include "VulkanUtils.hpp"
 #include "VulkanTexture.hpp"
 
@@ -21,51 +21,43 @@ private:
 	VkDevice device;
 public:
 	Buffer vertexBuffer, indexBuffer;
-	vks::Texture2D fontTexture;
+	vks::VulkanTexture2D fontTexture;
 	VkPipelineLayout pipelineLayout;
 	VkPipeline pipeline;
 	VkDescriptorPool descriptorPool;
 	VkDescriptorSetLayout descriptorSetLayout;
 	VkDescriptorSet descriptorSet;
 
-	struct PushConstBlock 
+	struct PushConstBlock
 	{
 		glm::vec2 scale;
 		glm::vec2 translate;
-	} pushConstBlock;
+	};
+	PushConstBlock pushConstBlock;
 
-	UI(vks::VulkanDevice *vulkanDevice, VkRenderPass renderPass, VkQueue queue, VkPipelineCache pipelineCache, VkSampleCountFlagBits multiSampleCount) 
+	UI(VulkanDevice *vulkanDevice, VkRenderPass renderPass, VkQueue queue, VkPipelineCache pipelineCache, VkSampleCountFlagBits multiSampleCount) 
 	{
 
 		this->device = vulkanDevice->logicalDevice;
 
 		ImGui::CreateContext();
 
-		/*
-			Font texture loading
-		*/
+		// ◊÷ÃÂŒ∆¿Ìº”‘ÿ
 		ImGuiIO& io = ImGui::GetIO();
 		unsigned char* fontData;
 		int texWidth, texHeight;
 
-		io.Fonts->AddFontFromFileTTF( "../../data/Roboto-Medium.ttf", 16.0f);
+		io.Fonts->AddFontFromFileTTF("../../data/Font/msyhl.ttc", 16.0f);
 		io.Fonts->GetTexDataAsRGBA32(&fontData, &texWidth, &texHeight);
-		fontTexture.loadFromBuffer(fontData, texWidth * texHeight * 4 * sizeof(char), VK_FORMAT_R8G8B8A8_UNORM, texWidth, texHeight, vulkanDevice, queue);
+		fontTexture.LoadFromBuffer(fontData, texWidth * texHeight * 4 * sizeof(char), VK_FORMAT_R8G8B8A8_UNORM, texWidth, texHeight, vulkanDevice, queue);
 
-		/*
-			Setup
-		*/
+		// …Ë÷√
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.FrameBorderSize = 0.0f;
 		style.WindowBorderSize = 0.0f;
 
-		/*
-			Descriptor pool
-		*/
-		std::vector<VkDescriptorPoolSize> poolSizes = 
-		{
-			{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 }
-		};
+		// √Ë ˆ∑˚≥ÿ
+		std::vector<VkDescriptorPoolSize> poolSizes = { { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 } };
 		VkDescriptorPoolCreateInfo descriptorPoolCI{};
 		descriptorPoolCI.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 		descriptorPoolCI.poolSizeCount = 1;
@@ -210,8 +202,8 @@ public:
 		pipelineCI.layout = pipelineLayout;
 		shaderStages = 
 		{
-			loadShader(device, "ui.vert.spv", VK_SHADER_STAGE_VERTEX_BIT),
-			loadShader(device, "ui.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT)
+			VulkanUtils::LoadShader(device, "ui.vert.spv", VK_SHADER_STAGE_VERTEX_BIT),
+			VulkanUtils::LoadShader(device, "ui.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT)
 		};
 		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCI, nullptr, &pipeline));
 
@@ -224,8 +216,8 @@ public:
 	~UI() 
 	{
 		ImGui::DestroyContext();
-		vertexBuffer.destroy();
-		indexBuffer.destroy();
+		vertexBuffer.Destroy();
+		indexBuffer.Destroy();
 		vkDestroyPipeline(device, pipeline, nullptr);
 		vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
 		vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
