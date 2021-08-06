@@ -214,7 +214,7 @@
     <ClCompile Include="VulkanPBR.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanPBR.h" />
+    <ClInclude Include="..\..\inc\Application\VulkanPBR.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

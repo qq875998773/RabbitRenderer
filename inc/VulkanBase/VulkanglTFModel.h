@@ -27,6 +27,7 @@ namespace vkglTF
 {
 	struct Node;
 
+	// 外包
 	struct BoundingBox 
 	{
 		glm::vec3 min;
@@ -37,6 +38,7 @@ namespace vkglTF
 		BoundingBox getAABB(glm::mat4 m);
 	};
 
+	// 纹理采样器
 	struct TextureSampler 
 	{
 		VkFilter magFilter;
@@ -46,6 +48,7 @@ namespace vkglTF
 		VkSamplerAddressMode addressModeW;
 	};
 
+	// 纹理
 	struct Texture 
 	{
 		VulkanDevice *device;
@@ -64,9 +67,15 @@ namespace vkglTF
 		void fromglTfImage(tinygltf::Image& gltfimage, TextureSampler textureSampler, VulkanDevice* device, VkQueue copyQueue);
 	};
 
+	// 材质
 	struct Material 
 	{
-		enum AlphaMode{ ALPHAMODE_OPAQUE, ALPHAMODE_MASK, ALPHAMODE_BLEND };
+		enum AlphaMode
+		{ 
+			ALPHAMODE_OPAQUE,
+			ALPHAMODE_MASK,
+			ALPHAMODE_BLEND
+		};
 		AlphaMode alphaMode = ALPHAMODE_OPAQUE;
 		float alphaCutoff = 1.0f;
 		float metallicFactor = 1.0f;
@@ -102,6 +111,7 @@ namespace vkglTF
 		VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
 	};
 
+	// 初始数据(模型原始信息)
 	struct Primitive 
 	{
 		uint32_t firstIndex;
@@ -114,6 +124,7 @@ namespace vkglTF
 		void setBoundingBox(glm::vec3 min, glm::vec3 max);
 	};
 
+	// 网格
 	struct Mesh 
 	{
 		VulkanDevice *device;
@@ -139,14 +150,16 @@ namespace vkglTF
 		void setBoundingBox(glm::vec3 min, glm::vec3 max);
 	};
 
+	// 蒙皮动画
 	struct Skin 
 	{
-		std::string name;
-		Node *skeletonRoot = nullptr;
-		std::vector<glm::mat4> inverseBindMatrices;
-		std::vector<Node*> joints;
+		std::string				name;
+		Node*					skeletonRoot = nullptr;
+		std::vector<glm::mat4>	inverseBindMatrices;
+		std::vector<Node*>		joints;
 	};
 
+	// 节点
 	struct Node 
 	{
 		Node *parent;
@@ -168,22 +181,37 @@ namespace vkglTF
 		~Node();
 	};
 
+	// 动画信息
 	struct AnimationChannel 
 	{
-		enum PathType { TRANSLATION, ROTATION, SCALE };
-		PathType path;
-		Node *node;
-		uint32_t samplerIndex;
+		enum PathType
+		{
+			TRANSLATION, 
+			ROTATION, 
+			SCALE
+		};
+
+		PathType	path;
+		Node*		node;
+		uint32_t	samplerIndex;
 	};
 
+	// 动画采样器
 	struct AnimationSampler 
 	{
-		enum InterpolationType { LINEAR, STEP, CUBICSPLINE };
-		InterpolationType interpolation;
-		std::vector<float> inputs;
-		std::vector<glm::vec4> outputsVec4;
+		enum InterpolationType 
+		{ 
+			LINEAR, 
+			STEP, 
+			CUBICSPLINE 
+		};
+
+		InterpolationType		interpolation;
+		std::vector<float>		inputs;
+		std::vector<glm::vec4>	outputsVec4;
 	};
 
+	// 动画
 	struct Animation 
 	{
 		std::string name;
@@ -193,9 +221,9 @@ namespace vkglTF
 		float end = std::numeric_limits<float>::min();
 	};
 
+	// 模型
 	struct Model 
 	{
-
 		VulkanDevice *device;
 
 		struct Vertex 
@@ -239,6 +267,7 @@ namespace vkglTF
 			glm::vec3 max = glm::vec3(-FLT_MAX);
 		} dimensions;
 
+		/// @brief 销毁
 		void destroy(VkDevice device);
 		void loadNode(vkglTF::Node* parent, const tinygltf::Node& node, uint32_t nodeIndex, const tinygltf::Model& model, std::vector<uint32_t>& indexBuffer, std::vector<Vertex>& vertexBuffer, float globalscale);
 		void loadSkins(tinygltf::Model& gltfModel);
@@ -248,6 +277,7 @@ namespace vkglTF
 		void loadTextureSamplers(tinygltf::Model& gltfModel);
 		void loadMaterials(tinygltf::Model& gltfModel);
 		void loadAnimations(tinygltf::Model& gltfModel);
+		/// @brief 从文件加载
 		void loadFromFile(std::string filename, VulkanDevice* device, VkQueue transferQueue, float scale = 1.0f);
 		void drawNode(Node* node, VkCommandBuffer commandBuffer);
 		void draw(VkCommandBuffer commandBuffer);

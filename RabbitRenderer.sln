@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "src\Applicat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VulkanBase", "src\VulkanBase\VulkanBase.vcxproj", "{625BAA85-4760-39AA-A20C-A8B7008F9479}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportModel", "src\ImportModel\ImportModel.vcxproj", "{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -29,6 +31,12 @@ Global
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Release|x64.Build.0 = Release|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}.Debug|x64.ActiveCfg = Debug|x64
+		{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}.Debug|x64.Build.0 = Debug|x64
+		{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}.Release|x64.ActiveCfg = Release|x64
+		{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}.Release|x64.Build.0 = Release|x64
+		{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{8D5F9904-0E2B-4BC9-BC8D-24A7A1DD44D7}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
