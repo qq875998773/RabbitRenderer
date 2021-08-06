@@ -231,8 +231,8 @@ void VulkanPBR::LoadAssets()
 
 	textures.empty.LoadFromFile(assetpath + "textures/empty.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
 
-	std::string sceneFile = assetpath + "models/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
-	//std::string sceneFile = assetpath + "models/Sponza/glTF/Sponza.gltf";	// 神庙场景
+	std::string sceneFile = assetpath + "models/glTF/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
+	//std::string sceneFile = assetpath + "models/glTF/Sponza/glTF/Sponza.gltf";	// 神庙场景
 	std::string envMapFile = assetpath + "environments/papermill.ktx";  // 默认环境贴图
 	for (size_t i = 0; i < args.size(); i++)
 	{
@@ -263,7 +263,7 @@ void VulkanPBR::LoadAssets()
 	}
 
 	LoadScene(sceneFile.c_str());
-	models.skybox.loadFromFile(assetpath + "models/Box/glTF-Embedded/Box.gltf", vulkanDevice, queue);
+	models.skybox.loadFromFile(assetpath + "models/glTF/Box/glTF-Embedded/Box.gltf", vulkanDevice, queue);
 
 	LoadEnvironment(envMapFile.c_str());
 }

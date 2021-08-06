@@ -28,6 +28,9 @@
     <ClCompile Include="VulkanSwapChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VulkanObjModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanObjModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
