@@ -23,6 +23,7 @@
 // 在此处更改此值还需在顶点着色器中进行更改
 #define MAX_NUM_JOINTS 128u
 
+/// @brief 解析gltf 2.0模型
 namespace vkglTF
 {
 	struct Node;

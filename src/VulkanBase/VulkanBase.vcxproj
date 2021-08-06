@@ -182,6 +182,7 @@
     <ClCompile Include="VulkanDevice.cpp" />
     <ClCompile Include="VulkanBase.cpp" />
     <ClCompile Include="VulkanglTFModel.cpp" />
+    <ClCompile Include="VulkanObjModel.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanBase.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanglTFModel.h" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanObjModel.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.hpp" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.hpp" />
