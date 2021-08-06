@@ -1,4 +1,3 @@
-#include "..\..\inc\ImportModel\ModelData\Model.h"
 #pragma once
 
 #define TINYGLTF_IMPLEMENTATION
