@@ -1,3 +1,4 @@
+#include "..\..\inc\ImportModel\ModelData\Model.h"
 #pragma once
 
 #define TINYGLTF_IMPLEMENTATION
@@ -405,7 +406,6 @@ namespace vkglTF
 		}
 	}
 
-	// Model
 	void Model::destroy(VkDevice device)
 	{
 		if (vertices.buffer != VK_NULL_HANDLE) 
@@ -734,7 +734,8 @@ namespace vkglTF
 		{
 			tinygltf::Image image = gltfModel.images[tex.source];
 			vkglTF::TextureSampler textureSampler;
-			if (tex.sampler == -1) {
+			if (tex.sampler == -1) 
+			{
 				// No sampler specified, use a default one
 				textureSampler.magFilter = VK_FILTER_LINEAR;
 				textureSampler.minFilter = VK_FILTER_LINEAR;
@@ -956,7 +957,7 @@ namespace vkglTF
 						if (input < animation.start) 
 						{
 							animation.start = input;
-						};
+						}
 						if (input > animation.end) 
 						{
 							animation.end = input;
@@ -1094,7 +1095,8 @@ namespace vkglTF
 				}
 			}
 		}
-		else {
+		else 
+		{
 			// TODO: throw
 			std::cerr << "Could not load gltf file: " << error << std::endl;
 			return;

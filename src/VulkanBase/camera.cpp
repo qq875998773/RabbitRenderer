@@ -34,6 +34,7 @@ void Camera::SetPerspective(float fov, float aspect, float znear, float zfar)
 	m_fFov = fov;
 	m_fZnear = znear;
 	m_fZfar = zfar;
+	// fov为透视投影度数.其他参数是宽高比,近裁剪面和远裁剪面.重要的是使用当前的交换链扩展来计算宽高比,以便在窗体调整大小后参考最新的窗体宽度和高度
 	matrices.perspective = glm::perspective(glm::radians(fov), aspect, znear, zfar);
 }
 

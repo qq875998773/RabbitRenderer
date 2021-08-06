@@ -17,7 +17,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanPBR.h">
+    <ClInclude Include="..\..\inc\Application\VulkanPBR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

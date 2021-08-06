@@ -226,18 +226,21 @@ void VulkanPBR::LoadAssets()
 		exit(-1);
 	}
 
+	// 环境贴图
 	VulkanUtils::ReadDirectory(assetpath + "environments", "*.ktx", environments, false);
 
 	textures.empty.LoadFromFile(assetpath + "textures/empty.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
 
 	std::string sceneFile = assetpath + "models/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
-	std::string envMapFile = assetpath + "environments/papermill.ktx";
+	//std::string sceneFile = assetpath + "models/Sponza/glTF/Sponza.gltf";	// 神庙场景
+	std::string envMapFile = assetpath + "environments/papermill.ktx";  // 默认环境贴图
 	for (size_t i = 0; i < args.size(); i++)
 	{
 		if (std::string(args[i]).find(".gltf") != std::string::npos)
 		{
 			std::ifstream file(args[i]);
-			if (file.good()) {
+			if (file.good()) 
+			{
 				sceneFile = args[i];
 			}
 			else
@@ -1589,7 +1592,7 @@ void VulkanPBR::Prepare()
 
 	// 设置相机
 	camera.type = CameraType::lookat;
-	camera.SetPerspective(45.0f, (float)width / (float)height, 0.1f, 256.0f);
+	camera.SetPerspective(45.0f, (float)width / (float)height, 0.001f, 256.0f);
 	camera.rotationSpeed = 0.25f;
 	camera.movementSpeed = 0.1f;
 	camera.SetPosition({ 0.0f, 0.0f, 1.0f });

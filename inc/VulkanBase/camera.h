@@ -60,6 +60,10 @@ public:
 	float GetFarClip();
 
 	/// @brief 设置透视
+	/// @param [in ] fov 透视投影的度数(一般默认45度)
+	/// @param [in ] aspect 宽高比
+	/// @param [in ] znear 近裁剪面
+	/// @param [in ] zfar 远裁剪面
 	void SetPerspective(float fov, float aspect, float znear, float zfar);
 
 	// 更新旋转
@@ -83,9 +87,9 @@ public:
 	bool UpdatePad(glm::vec2 axisLeft, glm::vec2 axisRight, float deltaTime);
 
 private:
-	float m_fFov;
-	float m_fZnear;
-	float m_fZfar;
+	float m_fFov = 45.f;
+	float m_fZnear = .1f;
+	float m_fZfar = 256.f;
 
 private:
 	void UpdateViewMatrix();
