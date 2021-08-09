@@ -217,7 +217,7 @@ void VulkanPBR::RecordCommandBuffers()
 
 void VulkanPBR::LoadAssets()
 {
-	const std::string assetpath = "../../data/";
+	//const std::string assetpath = "../../data/";
 	struct stat info;
 	if (stat(assetpath.c_str(), &info) != 0)
 	{
@@ -229,10 +229,11 @@ void VulkanPBR::LoadAssets()
 	// 环境贴图
 	VulkanUtils::ReadDirectory(assetpath + "environments", "*.ktx", environments, false);
 
+	// 读取一个空的环境贴图
 	textures.empty.LoadFromFile(assetpath + "textures/empty.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
 
 	std::string sceneFile = assetpath + "models/glTF/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
-	//std::string sceneFile = assetpath + "models/glTF/Sponza/glTF/Sponza.gltf";	// 神庙场景
+	//std::string sceneFile = assetpath + "models/glTF/Sponza/glTF/Sponza.gltf"; // 神庙场景
 	std::string envMapFile = assetpath + "environments/papermill.ktx";  // 默认环境贴图
 	for (size_t i = 0; i < args.size(); i++)
 	{
@@ -453,6 +454,7 @@ void VulkanPBR::SetupDescriptors()
 			descriptorSetAllocInfo.descriptorSetCount = 1;
 			VK_CHECK_RESULT(vkAllocateDescriptorSets(device, &descriptorSetAllocInfo, &material.descriptorSet));
 
+			// 图片描述符集
 			std::vector<VkDescriptorImageInfo> imageDescriptors =
 			{
 				textures.empty.descriptor,

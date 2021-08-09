@@ -51,7 +51,7 @@ struct Settings
 	bool					fullscreen = false;						// 是否全屏
 	bool					vsync = false;							// 是否抗撕裂
 	bool					multiSampling = true;					// 多重采样
-	VkSampleCountFlagBits	sampleCount = VK_SAMPLE_COUNT_4_BIT;
+	VkSampleCountFlagBits	sampleCount = VK_SAMPLE_COUNT_4_BIT;	// 设置采样数
 };
 
 /// @brief 深度模板
@@ -80,10 +80,10 @@ public:
 	uint32_t								height = 720;			// 窗口高
 	float									frameTimer = 1.0f;		// 帧时间
 	Camera									camera;					// 摄像机
-	glm::vec2								mousePos;
+	glm::vec2								mousePos;				// 鼠标位置
 	bool									paused = false;			// 停止刷新
-	uint32_t								lastFPS = 0;
-	Settings								settings;
+	uint32_t								lastFPS = 0;			// 帧率
+	Settings								settings;				// 渲染设置
 	DepthStencil							depthStencil;			// 深度模板
 	MouseButtons							mouseButtons;			// 鼠标按键
 	// 操作系统特定对象
@@ -128,36 +128,38 @@ public:
 	/// @brief 渲染帧
 	void RenderFrame();
 private:
-	float									m_fFpsTimer = 0.0f;
-	uint32_t								m_iFrameCounter = 0;
-	uint32_t								m_iDestWidth;
-	uint32_t								m_iDestHeight;
-	bool									m_bResizing = false;
-	PFN_vkCreateDebugReportCallbackEXT		m_vkCreateDebugReportCallback;
-	PFN_vkDestroyDebugReportCallbackEXT		m_vkDestroyDebugReportCallback;
-	VkDebugReportCallbackEXT				debugReportCallback;
-	MultisampleTarget						multisampleTarget;
+	float									m_fFpsTimer = 0.0f;					// 帧率时间
+	uint32_t								m_iFrameCounter = 0;				// 帧计数器
+	uint32_t								m_iDestWidth;						// 更改的窗口宽
+	uint32_t								m_iDestHeight;						// 更改的窗口高
+	bool									m_bResizing = false;				// 窗口大小改变
+	PFN_vkCreateDebugReportCallbackEXT		m_vkCreateDebugReportCallback;		// 创建调试消息回调
+	PFN_vkDestroyDebugReportCallbackEXT		m_vkDestroyDebugReportCallback;		// 销毁调试消息回调
+	VkDebugReportCallbackEXT				debugReportCallback;				// 调试消息回调
+	MultisampleTarget						multisampleTarget;					// 多采样目标
 private:
+	/// @brief 鼠标移动事件
 	void HandleMouseMove(int32_t x, int32_t y);
 protected:
 	VkInstance								instance;							// vulkan实例
-	VkPhysicalDevice						physicalDevice;
-	VkPhysicalDeviceProperties				deviceProperties;
-	VkPhysicalDeviceFeatures				deviceFeatures;
-	VkPhysicalDeviceMemoryProperties		deviceMemoryProperties;
-	VkDevice								device;
-	VulkanDevice* vulkanDevice;
-	VkQueue									queue;
-	VkFormat								depthFormat;
-	VkCommandPool							cmdPool;
-	VkRenderPass							renderPass;
-	std::vector<VkFramebuffer>				frameBuffers;
-	uint32_t								currentBuffer = 0;
-	VkDescriptorPool						descriptorPool;
-	VkPipelineCache							pipelineCache;
-	VulkanSwapChain							swapChain;
-	std::string								title = "Rabbit-Renderer";
-	std::string								name = "RabbitRenderer";
+	VkPhysicalDevice						physicalDevice;						// 物理设备
+	VkPhysicalDeviceProperties				deviceProperties;					// 设备属性
+	VkPhysicalDeviceFeatures				deviceFeatures;						// 设备功能
+	VkPhysicalDeviceMemoryProperties		deviceMemoryProperties;				// 设备内存属性
+	VkDevice								device;								// vk逻辑设备
+	VulkanDevice*							vulkanDevice;						// 所有设备信息
+	VkQueue									queue;								// 队列
+	VkFormat								depthFormat;						// 深度格式
+	VkCommandPool							cmdPool;							// 命令池
+	VkRenderPass							renderPass;							// 渲染过程
+	std::vector<VkFramebuffer>				frameBuffers;						// 帧缓冲区
+	uint32_t								currentBuffer = 0;					// 当前缓冲区
+	VkDescriptorPool						descriptorPool;						// 描述符池
+	VkPipelineCache							pipelineCache;						// 管线缓存
+	VulkanSwapChain							swapChain;							// 交换链
+	std::string								title = "Rabbit-Renderer";			// vk程序抬头
+	std::string								name = "RabbitRenderer";			// vk应用程序注册命
 protected:
+	/// @brief 窗口大小改变处理
 	void WindowResize();
 };

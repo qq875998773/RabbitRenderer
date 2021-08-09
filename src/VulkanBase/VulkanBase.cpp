@@ -31,19 +31,19 @@ VulkanBase::VulkanBase()
 	for (size_t i = 0; i < args.size(); i++)
 	{
 		if (args[i] == std::string("-validation"))
-		{
+		{// 是否开启验证
 			settings.validation = true;
 		}
 		if (args[i] == std::string("-vsync"))
-		{
+		{// 是否开启抗撕裂
 			settings.vsync = true;
 		}
 		if ((args[i] == std::string("-f")) || (args[i] == std::string("--fullscreen")))
-		{
+		{// 是否全屏
 			settings.fullscreen = true;
 		}
 		if ((args[i] == std::string("-w")) || (args[i] == std::string("--width")))
-		{
+		{// 窗体宽度
 			uint32_t w = strtol(args[i + 1], &numConvPtr, 10);
 			if (numConvPtr != args[i + 1]) 
 			{
@@ -51,11 +51,11 @@ VulkanBase::VulkanBase()
 			}
 		}
 		if ((args[i] == std::string("-h")) || (args[i] == std::string("--height")))
-		{
+		{// 窗体高度
 			uint32_t h = strtol(args[i + 1], &numConvPtr, 10);
 			if (numConvPtr != args[i + 1])
 			{
-				height = h; 
+				height = h;
 			}
 		}
 	}
@@ -163,34 +163,34 @@ void VulkanBase::HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			}
 		}
 		break;
-	case WM_LBUTTONDOWN:
+	case WM_LBUTTONDOWN:// 鼠标左键按下
 		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
 		mouseButtons.left = true;
 		break;
-	case WM_RBUTTONDOWN:
+	case WM_RBUTTONDOWN:// 鼠标右键按下
 		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
 		mouseButtons.right = true;
 		break;
-	case WM_MBUTTONDOWN:
+	case WM_MBUTTONDOWN:// 鼠标中键按下
 		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
 		mouseButtons.middle = true;
 		break;
-	case WM_LBUTTONUP:
+	case WM_LBUTTONUP:// 左键抬起
 		mouseButtons.left = false;
 		break;
-	case WM_RBUTTONUP:
+	case WM_RBUTTONUP:// 右键抬起
 		mouseButtons.right = false;
 		break;
-	case WM_MBUTTONUP:
+	case WM_MBUTTONUP:// 中键抬起
 		mouseButtons.middle = false;
 		break;
-	case WM_MOUSEWHEEL:
+	case WM_MOUSEWHEEL:// 鼠标滚轮
 	{
 		short wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 		camera.Translate(glm::vec3(0.0f, 0.0f, -(float)wheelDelta * 0.005f * camera.movementSpeed));
 		break;
 	}
-	case WM_MOUSEMOVE:
+	case WM_MOUSEMOVE: // 鼠标移动
 	{
 		HandleMouseMove(LOWORD(lParam), HIWORD(lParam));
 		break;
@@ -925,6 +925,7 @@ void VulkanBase::WindowResize()
 	width = m_iDestWidth;
 	height = m_iDestHeight;
 	SetupSwapChain();
+
 	if (settings.multiSampling)
 	{
 		vkDestroyImageView(device, multisampleTarget.color.view, nullptr);
@@ -934,13 +935,16 @@ void VulkanBase::WindowResize()
 		vkDestroyImage(device, multisampleTarget.depth.image, nullptr);
 		vkFreeMemory(device, multisampleTarget.depth.memory, nullptr);
 	}
+
 	vkDestroyImageView(device, depthStencil.view, nullptr);
 	vkDestroyImage(device, depthStencil.image, nullptr);
 	vkFreeMemory(device, depthStencil.mem, nullptr);
+
 	for (uint32_t i = 0; i < frameBuffers.size(); i++)
 	{
 		vkDestroyFramebuffer(device, frameBuffers[i], nullptr);
 	}
+
 	SetupFrameBuffer();
 	vkDeviceWaitIdle(device);
 
