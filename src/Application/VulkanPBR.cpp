@@ -188,7 +188,6 @@ void VulkanPBR::RecordCommandBuffers()
 			vkCmdBindIndexBuffer(currentCB, model.indices.buffer, 0, VK_INDEX_TYPE_UINT32);
 		}
 
-
 		// 不透明
 		for (auto node : model.nodes)
 		{
@@ -217,7 +216,6 @@ void VulkanPBR::RecordCommandBuffers()
 
 void VulkanPBR::LoadAssets()
 {
-	//const std::string assetpath = "../../data/";
 	struct stat info;
 	if (stat(assetpath.c_str(), &info) != 0)
 	{
@@ -227,14 +225,14 @@ void VulkanPBR::LoadAssets()
 	}
 
 	// 环境贴图
-	VulkanUtils::ReadDirectory(assetpath + "environments", "*.ktx", environments, false);
+	VulkanUtils::ReadDirectory(assetpath + "environments/ktx", "*.ktx", environments, false);
 
 	// 读取一个空的环境贴图
-	textures.empty.LoadFromFile(assetpath + "textures/empty.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
+	textures.empty.LoadFromFile(assetpath + "environments/ktx/empty.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
 
 	std::string sceneFile = assetpath + "models/glTF/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
 	//std::string sceneFile = assetpath + "models/glTF/Sponza/glTF/Sponza.gltf"; // 神庙场景
-	std::string envMapFile = assetpath + "environments/papermill.ktx";  // 默认环境贴图
+	std::string envMapFile = assetpath + "environments/ktx/papermill.ktx";  // 默认环境贴图
 	for (size_t i = 0; i < args.size(); i++)
 	{
 		if (std::string(args[i]).find(".gltf") != std::string::npos)
@@ -282,14 +280,14 @@ void VulkanPBR::LoadScene(std::string filename)
 
 void VulkanPBR::LoadEnvironment(std::string filename)
 {
-	std::cout << "加载纹理图片资源: " << filename << std::endl;
+	std::cout << "加载环境贴图: " << filename << std::endl;
 	if (textures.environmentCube.image)
 	{
 		textures.environmentCube.Destroy();
 		textures.irradianceCube.Destroy();
 		textures.prefilteredCube.Destroy();
 	}
-	textures.environmentCube.loadFromFile(filename, VK_FORMAT_R16G16B16A16_SFLOAT, vulkanDevice, queue);
+	textures.environmentCube.LoadFromFile(filename, VK_FORMAT_R16G16B16A16_SFLOAT, vulkanDevice, queue);
 	GenerateCubemaps();
 }
 
@@ -712,6 +710,7 @@ void VulkanPBR::PreparePipelines()
 
 void VulkanPBR::GenerateBRDFLUT()
 {
+	// 开始时间
 	auto tStart = std::chrono::high_resolution_clock::now();
 
 	const VkFormat format = VK_FORMAT_R16G16_SFLOAT;
@@ -964,9 +963,10 @@ void VulkanPBR::GenerateBRDFLUT()
 	textures.lutBrdf.descriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	textures.lutBrdf.device = vulkanDevice;
 
+	// 结束时间
 	auto tEnd = std::chrono::high_resolution_clock::now();
-	auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count();
-	std::cout << "BRDF LUT生成: " << tDiff << " 毫秒" << std::endl;
+	auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count(); // 计算时间间隔
+	std::cout << "生成lut BRDF: " << tDiff << " 毫秒" << std::endl;
 }
 
 void VulkanPBR::GenerateCubemaps()
@@ -975,7 +975,7 @@ void VulkanPBR::GenerateCubemaps()
 
 	for (uint32_t target = 0; target < PREFILTEREDENV + 1; target++)
 	{
-		vks::TextureCubeMap cubemap;
+		TextureCubeMap cubemap;
 
 		auto tStart = std::chrono::high_resolution_clock::now();
 

@@ -20,13 +20,14 @@ struct UI
 private:
 	VkDevice device;
 public:
-	Buffer vertexBuffer, indexBuffer;
-	vks::VulkanTexture2D fontTexture;
-	VkPipelineLayout pipelineLayout;
-	VkPipeline pipeline;
-	VkDescriptorPool descriptorPool;
-	VkDescriptorSetLayout descriptorSetLayout;
-	VkDescriptorSet descriptorSet;
+	Buffer					vertexBuffer;
+	Buffer					indexBuffer;
+	VulkanTexture2D			fontTexture;
+	VkPipelineLayout		pipelineLayout;
+	VkPipeline				pipeline;
+	VkDescriptorPool		descriptorPool;
+	VkDescriptorSetLayout	descriptorSetLayout;
+	VkDescriptorSet			descriptorSet;
 
 	struct PushConstBlock
 	{
@@ -37,7 +38,6 @@ public:
 
 	UI(VulkanDevice *vulkanDevice, VkRenderPass renderPass, VkQueue queue, VkPipelineCache pipelineCache, VkSampleCountFlagBits multiSampleCount) 
 	{
-
 		this->device = vulkanDevice->logicalDevice;
 
 		ImGui::CreateContext();
@@ -65,9 +65,7 @@ public:
 		descriptorPoolCI.maxSets = 1;
 		VK_CHECK_RESULT(vkCreateDescriptorPool(device, &descriptorPoolCI, nullptr, &descriptorPool));
 
-		/*
-			Descriptor set layout
-		*/
+		// 布局描述符集
 		VkDescriptorSetLayoutBinding setLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr };
 		VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCI{};
 		descriptorSetLayoutCI.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -75,9 +73,7 @@ public:
 		descriptorSetLayoutCI.bindingCount = 1;
 		VK_CHECK_RESULT(vkCreateDescriptorSetLayout(device, &descriptorSetLayoutCI, nullptr, &descriptorSetLayout));
 
-		/*
-			Descriptor set
-		*/
+		// 描述符集
 		VkDescriptorSetAllocateInfo descriptorSetAllocInfo{};
 		descriptorSetAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 		descriptorSetAllocInfo.descriptorPool = descriptorPool;
@@ -93,9 +89,7 @@ public:
 		writeDescriptorSet.pImageInfo = &fontTexture.descriptor;
 		vkUpdateDescriptorSets(device, 1, &writeDescriptorSet, 0, nullptr);
 
-		/*
-			Pipeline layout
-		*/
+		// 管线布局
 		VkPushConstantRange pushConstantRange{ VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PushConstBlock) };
 
 		VkPipelineLayoutCreateInfo pipelineLayoutCI{};
@@ -108,9 +102,7 @@ public:
 		pipelineLayoutCI.pPushConstantRanges = &pushConstantRange;
 		VK_CHECK_RESULT(vkCreatePipelineLayout(device, &pipelineLayoutCI, nullptr, &pipelineLayout));
 
-		/*
-			Pipeline
-		*/
+		// 渲染管线
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyStateCI{};
 		inputAssemblyStateCI.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 		inputAssemblyStateCI.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;

@@ -74,7 +74,7 @@ struct MouseButtons
 class VulkanBase
 {
 public: 
-	static std::vector<const char*>			args;
+	static std::vector<const char*>			args;					// 命令行参数
 	bool									prepared = false;		// 准备渲染
 	uint32_t								width = 1280;			// 窗口宽
 	uint32_t								height = 720;			// 窗口高
