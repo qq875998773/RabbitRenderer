@@ -1,5 +1,7 @@
 #include "VulkanPBR.h"
 
+#include "VulkanObjModel.h"
+
 // vulank的PBR渲染实例
 VulkanPBR* VulkanPBRRender;
 
@@ -19,6 +21,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 /// @param [in ] hInstance 窗口实例
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 {
+	ImportModel test;
+	test.LoadModel("E:/vulkan/RabbitRenderer/data/models/glTF/BrainStem/glTF/BrainStem.gltf");
+
 	for (int32_t i = 0; i < __argc; i++) 
 	{
 		VulkanPBR::args.push_back(__argv[i]);
