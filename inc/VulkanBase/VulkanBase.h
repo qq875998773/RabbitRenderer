@@ -150,7 +150,7 @@ protected:
 	VulkanDevice*							vulkanDevice;						// 所有设备信息
 	VkQueue									queue;								// 队列
 	VkFormat								depthFormat;						// 深度格式
-	VkCommandPool							cmdPool;							// 命令池
+	VkCommandPool							cmdPool;							// 指令池
 	VkRenderPass							renderPass;							// 渲染过程
 	std::vector<VkFramebuffer>				frameBuffers;						// 帧缓冲区
 	uint32_t								currentBuffer = 0;					// 当前缓冲区

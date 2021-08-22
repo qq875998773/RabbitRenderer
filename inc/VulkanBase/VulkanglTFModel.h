@@ -43,8 +43,8 @@ namespace vkglTF
 	// 纹理采样器
 	struct TextureSampler 
 	{
-		VkFilter				magFilter;
-		VkFilter				minFilter;
+		VkFilter				magFilter;		// 放大过滤器
+		VkFilter				minFilter;		// 缩小过滤器
 		VkSamplerAddressMode	addressModeU;
 		VkSamplerAddressMode	addressModeV;
 		VkSamplerAddressMode	addressModeW;

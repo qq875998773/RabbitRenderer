@@ -543,7 +543,7 @@ void VulkanBase::Prepare()
 	cmdPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 	VK_CHECK_RESULT(vkCreateCommandPool(device, &cmdPoolInfo, nullptr, &cmdPool));
 
-	// 渲染过程
+	// 渲染通道
 	if (settings.multiSampling)  // 如果多重采样
 	{
 		std::array<VkAttachmentDescription, 4> attachments = {};
@@ -602,6 +602,7 @@ void VulkanBase::Prepare()
 		resolveReference.attachment = 1;
 		resolveReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+		// 子通道
 		VkSubpassDescription subpass = {};
 		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 		subpass.colorAttachmentCount = 1;
@@ -714,7 +715,7 @@ void VulkanBase::Prepare()
 	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 	VK_CHECK_RESULT(vkCreatePipelineCache(device, &pipelineCacheCreateInfo, nullptr, &pipelineCache));
 
-	// 帧缓冲区
+	// 设置帧缓冲区
 	SetupFrameBuffer();
 }
 
