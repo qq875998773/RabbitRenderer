@@ -147,7 +147,7 @@ protected:
 	VkPhysicalDeviceFeatures				deviceFeatures;						// 设备功能
 	VkPhysicalDeviceMemoryProperties		deviceMemoryProperties;				// 设备内存属性
 	VkDevice								device;								// vk逻辑设备
-	VulkanDevice*							vulkanDevice;						// 所有设备信息
+	VulkanDevice*							vulkanDevice;						// 选择的物理设备信息
 	VkQueue									queue;								// 队列
 	VkFormat								depthFormat;						// 深度格式
 	VkCommandPool							cmdPool;							// 指令池
@@ -158,7 +158,7 @@ protected:
 	VkPipelineCache							pipelineCache;						// 管线缓存
 	VulkanSwapChain							swapChain;							// 交换链
 	std::string								title = "Rabbit-Renderer";			// vk程序抬头
-	std::string								name = "RabbitRenderer";			// vk应用程序注册命
+	std::string								name = "RabbitRenderer";			// vk应用程序注册名
 protected:
 	/// @brief 窗口大小改变处理
 	void WindowResize();

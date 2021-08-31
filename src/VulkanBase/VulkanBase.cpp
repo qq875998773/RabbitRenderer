@@ -239,12 +239,12 @@ void VulkanBase::InitVulkan()
 		VK_CHECK_RESULT(m_vkCreateDebugReportCallback(instance, &debugCreateInfo, nullptr, &debugReportCallback));
 	}
 
-	// GPU的选择
+	// 选择GPU
 	uint32_t gpuCount = 0;
 	VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &gpuCount, nullptr));
 	assert(gpuCount > 0);
 	std::vector<VkPhysicalDevice> physicalDevices(gpuCount);
-	err = vkEnumeratePhysicalDevices(instance, &gpuCount, physicalDevices.data());
+	err = vkEnumeratePhysicalDevices(instance, &gpuCount, physicalDevices.data()); // 获取物理设备个数
 	if (err)
 	{
 		std::cerr << "无法枚举物理设备!" << std::endl;
@@ -303,8 +303,9 @@ void VulkanBase::InitVulkan()
 	VkBool32 validDepthFormat = false;
 	for (auto& format : depthFormats)
 	{
-		VkFormatProperties formatProps;
+		VkFormatProperties formatProps; // 格式特性
 		vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
+		// 将左右操作数以二进制的表示方式，对应位进行“与”操作，都为1时，结果为1，否则为零
 		if (formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
 		{
 			depthFormat = format;
