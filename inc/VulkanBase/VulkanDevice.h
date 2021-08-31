@@ -30,7 +30,7 @@ public:
 	QueueFamilyIndices						queueFamilyIndices;				// 队列族索引
 
 public:
-	/// @brief 构造函数
+	/// @brief vulkan设备
 	/// @param [in ] physicalDevice 要使用的物理设备
 	VulkanDevice(VkPhysicalDevice physicalDevice);
 	~VulkanDevice();

@@ -22,14 +22,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-/// @brief 纹理
+/// @brief 纹理信息
 struct Textures
 {
-	vks::TextureCubeMap		environmentCube;		// 环境盒
-	vks::VulkanTexture2D	empty;
-	vks::VulkanTexture2D	lutBrdf;
-	vks::TextureCubeMap		irradianceCube;
-	vks::TextureCubeMap		prefilteredCube;
+	TextureCubeMap		environmentCube;		// 环境盒
+	VulkanTexture2D		empty;
+	VulkanTexture2D		lutBrdf;				// 高光brdf
+	TextureCubeMap		irradianceCube;			// 辐射照度
+	TextureCubeMap		prefilteredCube;		// 预过滤
 };
 
 struct Models
@@ -141,7 +141,7 @@ public:
 	bool									displayBackground = true;
 	LightSource								lightSource;
 	UI*										ui;
-	const std::string						assetpath = "../../data/";
+	const std::string						assetpath = "../../data/";			// 资源路径 默认data文件夹
 	bool									rotateModel = false;
 	glm::vec3								modelrot = glm::vec3(0.0f);
 	glm::vec3								modelPos = glm::vec3(0.0f);
@@ -168,8 +168,8 @@ public:
 	/// @param [in ] filename 场景文件目录
 	void LoadScene(std::string filename);
 
-	/// @brief 纹理图片资源
-	/// @param [in ] filename 纹理资源目录
+	/// @brief 加载环境贴图
+	/// @param [in ] filename 环境资源目录
 	void LoadEnvironment(std::string filename);
 
 	/// @brief 设置节点描述符集

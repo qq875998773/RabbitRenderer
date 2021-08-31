@@ -124,7 +124,6 @@ vec4 SRGBtoLINEAR(vec4 srgbIn)
 // or from the interpolated mesh normal and tangent attributes.
 vec3 getNormal()
 {
-	// Perturb normal, see http://www.thetenthplanet.de/archives/1180
 	vec3 tangentNormal = texture(normalMap, material.normalTextureSet == 0 ? inUV0 : inUV1).xyz * 2.0 - 1.0;
 
 	vec3 q1 = dFdx(inWorldPos);
@@ -164,8 +163,6 @@ vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
 }
 
 // Basic Lambertian diffuse
-// Implementation from Lambert's Photometria https://archive.org/details/lambertsphotome00lambgoog
-// See also [1], Equation 1
 vec3 diffuse(PBRInfo pbrInputs)
 {
 	return pbrInputs.diffuseColor / M_PI;

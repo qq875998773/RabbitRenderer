@@ -6,7 +6,6 @@ layout (constant_id = 0) const uint NUM_SAMPLES = 1024u;
 
 const float PI = 3.1415926536;
 
-// Based omn http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
 float random(vec2 co)
 {
 	float a = 12.9898;
@@ -19,7 +18,6 @@ float random(vec2 co)
 
 vec2 hammersley2d(uint i, uint N) 
 {
-	// Radical inverse based on http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
 	uint bits = (i << 16u) | (i >> 16u);
 	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
 	bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
@@ -29,7 +27,6 @@ vec2 hammersley2d(uint i, uint N)
 	return vec2(float(i) /float(N), rdi);
 }
 
-// Based on http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_slides.pdf
 vec3 importanceSample_GGX(vec2 Xi, float roughness, vec3 normal) 
 {
 	// Maps a 2D point to a hemisphere with spread based on roughness

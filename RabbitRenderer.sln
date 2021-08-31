@@ -10,6 +10,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "src\Applicat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VulkanBase", "src\VulkanBase\VulkanBase.vcxproj", "{625BAA85-4760-39AA-A20C-A8B7008F9479}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{433B5106-D4CA-4575-9EA5-80C8BFE99D86}"
+	ProjectSection(SolutionItems) = preProject
+		shaders\filtercube.vert = shaders\filtercube.vert
+		shaders\genbrdflut.frag = shaders\genbrdflut.frag
+		shaders\genbrdflut.vert = shaders\genbrdflut.vert
+		shaders\irradiancecube.frag = shaders\irradiancecube.frag
+		shaders\pbr.vert = shaders\pbr.vert
+		shaders\pbr_khr.frag = shaders\pbr_khr.frag
+		shaders\prefilterenvmap.frag = shaders\prefilterenvmap.frag
+		shaders\skybox.frag = shaders\skybox.frag
+		shaders\skybox.vert = shaders\skybox.vert
+		shaders\ui.frag = shaders\ui.frag
+		shaders\ui.vert = shaders\ui.vert
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

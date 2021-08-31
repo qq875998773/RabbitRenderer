@@ -1,11 +1,11 @@
 #include "VulkanPBR.h"
 
-// vulank的PBR渲染实例
+#include "VulkanObjModel.h"
+
+// vulankPBR渲染实例
 VulkanPBR* VulkanPBRRender;
 
 /// @brief 窗口消息
-/// @param [in ] hWnd 窗口句柄
-/// @param [in ] uMsg 窗口消息
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (VulkanPBRRender != NULL)
@@ -19,6 +19,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 /// @param [in ] hInstance 窗口实例
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 {
+	//ImportModel test;
+	////test.LoadModel("G:/c++/RabbitRenderer/data/models/OBJ/classroom/classroom.obj");
+	//test.LoadModel("G:/c++/RabbitRenderer/data/models/glTF/BrainStem/glTF/BrainStem.gltf");
+
 	for (int32_t i = 0; i < __argc; i++) 
 	{
 		VulkanPBR::args.push_back(__argv[i]);

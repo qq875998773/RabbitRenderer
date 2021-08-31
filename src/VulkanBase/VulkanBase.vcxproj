@@ -65,7 +65,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -101,7 +101,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -137,14 +137,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
