@@ -37,14 +37,13 @@ struct SKey
 class Camera
 {
 public:
-	// 默认约束相机
 	CameraType	type;			// 设置相机 默认约束相机
 	glm::vec3	rotation;		// 旋转轴
 	glm::vec3	position;		// 定位点
 	float		rotationSpeed;	// 旋转速度
 	float		movementSpeed;	// 移动速度
 	bool		updated;		// 是否刷新
-	SMatrice	matrices;		// 变换矩阵
+	SMatrice	matrices;		// 变换矩阵 
 	SKey		keys;			// 鼠标键盘按键
 
 public:
@@ -54,9 +53,10 @@ public:
 	/// @brief 获取是否移动
 	bool Moving();
 
-	/// @brief 
+	/// @brief 获取近裁剪距离
 	float GetNearClip();
 
+	/// @brief 获取远裁剪距离
 	float GetFarClip();
 
 	/// @brief 设置透视
@@ -69,8 +69,10 @@ public:
 	// 更新旋转
 	void UpdateAspectRatio(float aspect);
 
+	// 设置定位点
 	void SetPosition(glm::vec3 position);
 
+	// 设置旋转
 	void SetRotation(glm::vec3 rotation);
 
 	void Rotate(glm::vec3 delta);
@@ -88,8 +90,8 @@ public:
 
 private:
 	float m_fFov = 45.f;
-	float m_fZnear = .1f;
-	float m_fZfar = 256.f;
+	float m_fZnear = .1f;	// 近裁剪距离
+	float m_fZfar = 256.f;	// 远裁剪距离
 
 private:
 	void UpdateViewMatrix();

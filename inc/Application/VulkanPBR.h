@@ -46,6 +46,7 @@ struct UniformBufferSet
 	Buffer params;
 };
 
+/// @brief 统一缓冲区对象矩阵
 struct UBOMatrices
 {
 	glm::mat4 projection;
