@@ -1,6 +1,6 @@
 #include "VulkanBase.h"
 
-std::vector<const char*> VulkanBase::args;
+// std::vector<const char*> VulkanBase::args;
 
 VKAPI_ATTR VkBool32 VKAPI_CALL DebugMessageCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType, uint64_t srcObject, size_t location, int32_t msgCode, const char * pLayerPrefix, const char * pMsg, void * pUserData)
 {
@@ -26,40 +26,6 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugMessageCallback(VkDebugReportFlagsEXT flags,
 
 VulkanBase::VulkanBase()
 {
-	char* numConvPtr;
-	// 解析命令行参数
-	for (size_t i = 0; i < args.size(); i++)
-	{
-		if (args[i] == std::string("-validation"))
-		{// 是否开启验证
-			settings.validation = true;
-		}
-		if (args[i] == std::string("-vsync"))
-		{// 是否开启抗撕裂
-			settings.vsync = true;
-		}
-		if ((args[i] == std::string("-f")) || (args[i] == std::string("--fullscreen")))
-		{// 是否全屏
-			settings.fullscreen = true;
-		}
-		if ((args[i] == std::string("-w")) || (args[i] == std::string("--width")))
-		{// 窗体宽度
-			uint32_t w = strtol(args[i + 1], &numConvPtr, 10);
-			if (numConvPtr != args[i + 1]) 
-			{
-				width = w; 
-			}
-		}
-		if ((args[i] == std::string("-h")) || (args[i] == std::string("--height")))
-		{// 窗体高度
-			uint32_t h = strtol(args[i + 1], &numConvPtr, 10);
-			if (numConvPtr != args[i + 1])
-			{
-				height = h;
-			}
-		}
-	}
-
 	AllocConsole();
 	AttachConsole(GetCurrentProcessId());
 	FILE* stream;
@@ -250,29 +216,7 @@ void VulkanBase::InitVulkan()
 		std::cerr << "无法枚举物理设备!" << std::endl;
 		exit(err);
 	}
-	uint32_t selectedDevice = 0;
-	for (size_t i = 0; i < args.size(); i++)
-	{
-		if ((args[i] == std::string("-g")) || (args[i] == std::string("--gpu")))
-		{
-			char* endptr;
-			uint32_t index = strtol(args[i + 1], &endptr, 10);
-			if (endptr != args[i + 1])
-			{
-				if (index > gpuCount - 1)
-				{
-					std::cerr << "选定设备索引 " << index << " 超出范围，恢复到设备0(使用-listgpus显示可用的Vulkan设备)" << std::endl;
-				}
-				else
-				{
-					std::cout << "选择的Vulkan设备:" << index << std::endl;
-					selectedDevice = index;
-				}
-			};
-			break;
-		}
-	}
-
+	uint32_t selectedDevice = 0; // 默认指定序号为0的显卡
 	physicalDevice = physicalDevices[selectedDevice];
 
 	vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
@@ -318,7 +262,7 @@ void VulkanBase::InitVulkan()
 	swapChain.Connect(instance, physicalDevice, device);
 }
 
-VkResult VulkanBase::CreateInstance(bool enableValidation)
+VkResult VulkanBase::CreateInstance(const bool& enableValidation)
 {
 	this->settings.validation = enableValidation;
 

@@ -78,7 +78,6 @@ void VulkanPBR::RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Materia
 				pushConstBlockMaterial.alphaMaskCutoff = primitive->material.alphaCutoff;
 
 				// TODO: glTF规范规定，即使存在镜面光泽度，也应首选金属粗糙度
-
 				if (primitive->material.pbrWorkflows.metallicRoughness)
 				{
 					// 金属粗糙度工作流
@@ -233,33 +232,6 @@ void VulkanPBR::LoadAssets()
 	std::string sceneFile = assetpath + "models/glTF/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
 	//std::string sceneFile = assetpath + "models/glTF/Sponza/glTF/Sponza.gltf"; // 神庙场景
 	std::string envMapFile = assetpath + "environments/ktx/papermill.ktx";  // 默认环境贴图
-	for (size_t i = 0; i < args.size(); i++)
-	{
-		if (std::string(args[i]).find(".gltf") != std::string::npos)
-		{
-			std::ifstream file(args[i]);
-			if (file.good()) 
-			{
-				sceneFile = args[i];
-			}
-			else
-			{
-				std::cout << "无法加载 \"" << args[i] << "\"" << std::endl;
-			}
-		}
-		if (std::string(args[i]).find(".ktx") != std::string::npos)
-		{
-			std::ifstream file(args[i]);
-			if (file.good())
-			{
-				envMapFile = args[i];
-			}
-			else
-			{
-				std::cout << "无法加载 \"" << args[i] << "\"" << std::endl;
-			}
-		}
-	}
 
 	LoadScene(sceneFile.c_str());
 	models.skybox.loadFromFile(assetpath + "models/glTF/Box/glTF-Embedded/Box.gltf", vulkanDevice, queue);

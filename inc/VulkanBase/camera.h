@@ -94,5 +94,6 @@ private:
 	float m_fZfar = 256.f;	// Ô¶²Ã¼ô¾àÀë
 
 private:
+	// Ë¢ĞÂÊÓ¿Ú¾ØÕó
 	void UpdateViewMatrix();
 };
