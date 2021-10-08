@@ -6,6 +6,7 @@ bin-release/
 .vs/
 x64/
 obj/
+msvc2017_64/
 
 # Other files and folders
 .settings/
