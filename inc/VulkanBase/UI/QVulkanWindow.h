@@ -1,6 +1,7 @@
+#include "VulkanBaseDef.h"
 #include "QtGui/QVulkanWindow.h"
 
-class VulkanRenderer : public QVulkanWindowRenderer
+class DLLEXPORTCLASS VulkanRenderer : public QVulkanWindowRenderer
 {
 public:
     VulkanRenderer(QVulkanWindow* w);
@@ -18,7 +19,7 @@ private:
     float m_green = 0;
 };
 
-class VulkanWindow : public QVulkanWindow
+class DLLEXPORTCLASS VulkanWindow : public QVulkanWindow
 {
 public:
     QVulkanWindowRenderer* createRenderer() override;
