@@ -12,12 +12,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VulkanPBR.cpp">
+    <ClCompile Include="VulkanRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\Application\VulkanPBR.h">
+    <ClInclude Include="..\..\inc\Application\VulkanRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

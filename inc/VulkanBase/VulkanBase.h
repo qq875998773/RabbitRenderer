@@ -123,7 +123,7 @@ public:
 	/// @brief 准备渲染
 	void Prepare();
 
-	/// @Brief 初始化交换链
+	/// @brief 初始化交换链
 	void InitSwapchain();
 
 	/// @brief 设置交换链

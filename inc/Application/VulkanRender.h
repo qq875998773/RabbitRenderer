@@ -117,7 +117,7 @@ struct PushConstBlockMaterial
 };
 
 
-class VulkanPBR : public VulkanBase
+class VulkanRender : public VulkanBase
 {
 public:
 	Textures								textures;
@@ -153,8 +153,8 @@ public:
 	int32_t									debugViewEquation = 0;
 
 public:
-	VulkanPBR();
-	~VulkanPBR();
+	VulkanRender();
+	~VulkanRender();
 	
 	/// @brief äÖÈ¾½Úµã
 	void RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Material::AlphaMode alphaMode);
