@@ -35,6 +35,7 @@ public:
 	VulkanDevice(VkPhysicalDevice physicalDevice);
 	~VulkanDevice();
 
+public:
 	/// @brief 获取已设置所有请求的属性位的内存类型的索引
 	/// @param [in ] typeBits 设置请求的资源支持的每种内存类型
 	/// @param [in ] properties 要请求的内存类型的属性

@@ -1,12 +1,12 @@
-#include "VulkanPBR.h"
+#include "VulkanRender.h"
 
-VulkanPBR::VulkanPBR()
+VulkanRender::VulkanRender()
 	: VulkanBase()
 {
 	title = "Vulkan PBR";
 }
 
-VulkanPBR::~VulkanPBR()
+VulkanRender::~VulkanRender()
 {
 	vkDestroyPipeline(device, pipelines.skybox, nullptr);
 	vkDestroyPipeline(device, pipelines.pbr, nullptr);
@@ -48,7 +48,7 @@ VulkanPBR::~VulkanPBR()
 	delete ui;
 }
 
-void VulkanPBR::RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Material::AlphaMode alphaMode)
+void VulkanRender::RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Material::AlphaMode alphaMode)
 {
 	if (node->mesh)
 	{
@@ -78,7 +78,6 @@ void VulkanPBR::RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Materia
 				pushConstBlockMaterial.alphaMaskCutoff = primitive->material.alphaCutoff;
 
 				// TODO: glTF规范规定，即使存在镜面光泽度，也应首选金属粗糙度
-
 				if (primitive->material.pbrWorkflows.metallicRoughness)
 				{
 					// 金属粗糙度工作流
@@ -121,7 +120,7 @@ void VulkanPBR::RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Materia
 	}
 }
 
-void VulkanPBR::RecordCommandBuffers()
+void VulkanRender::RecordCommandBuffers()
 {
 	VkCommandBufferBeginInfo cmdBufferBeginInfo{};
 	cmdBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -214,7 +213,7 @@ void VulkanPBR::RecordCommandBuffers()
 	}
 }
 
-void VulkanPBR::LoadAssets()
+void VulkanRender::LoadAssets()
 {
 	struct stat info;
 	if (stat(assetpath.c_str(), &info) != 0)
@@ -233,33 +232,6 @@ void VulkanPBR::LoadAssets()
 	std::string sceneFile = assetpath + "models/glTF/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf";
 	//std::string sceneFile = assetpath + "models/glTF/Sponza/glTF/Sponza.gltf"; // 神庙场景
 	std::string envMapFile = assetpath + "environments/ktx/papermill.ktx";  // 默认环境贴图
-	for (size_t i = 0; i < args.size(); i++)
-	{
-		if (std::string(args[i]).find(".gltf") != std::string::npos)
-		{
-			std::ifstream file(args[i]);
-			if (file.good()) 
-			{
-				sceneFile = args[i];
-			}
-			else
-			{
-				std::cout << "无法加载 \"" << args[i] << "\"" << std::endl;
-			}
-		}
-		if (std::string(args[i]).find(".ktx") != std::string::npos)
-		{
-			std::ifstream file(args[i]);
-			if (file.good())
-			{
-				envMapFile = args[i];
-			}
-			else
-			{
-				std::cout << "无法加载 \"" << args[i] << "\"" << std::endl;
-			}
-		}
-	}
 
 	LoadScene(sceneFile.c_str());
 	models.skybox.loadFromFile(assetpath + "models/glTF/Box/glTF-Embedded/Box.gltf", vulkanDevice, queue);
@@ -267,7 +239,7 @@ void VulkanPBR::LoadAssets()
 	LoadEnvironment(envMapFile.c_str());
 }
 
-void VulkanPBR::LoadScene(std::string filename)
+void VulkanRender::LoadScene(std::string filename)
 {
 	std::cout << "加载场景: " << filename << std::endl;
 	models.scene.destroy(device);
@@ -278,7 +250,7 @@ void VulkanPBR::LoadScene(std::string filename)
 	camera.SetRotation({ 0.0f, 0.0f, 0.0f });
 }
 
-void VulkanPBR::LoadEnvironment(std::string filename)
+void VulkanRender::LoadEnvironment(std::string filename)
 {
 	std::cout << "加载环境贴图: " << filename << std::endl;
 	if (textures.environmentCube.image)
@@ -291,7 +263,7 @@ void VulkanPBR::LoadEnvironment(std::string filename)
 	GenerateCubemaps();
 }
 
-void VulkanPBR::SetupNodeDescriptorSet(vkglTF::Node* node)
+void VulkanRender::SetupNodeDescriptorSet(vkglTF::Node* node)
 {
 	if (node->mesh)
 	{
@@ -318,7 +290,7 @@ void VulkanPBR::SetupNodeDescriptorSet(vkglTF::Node* node)
 	}
 }
 
-void VulkanPBR::SetupDescriptors()
+void VulkanRender::SetupDescriptors()
 {
 	// 描述符池
 	uint32_t imageSamplerCount = 0;
@@ -559,7 +531,7 @@ void VulkanPBR::SetupDescriptors()
 	}
 }
 
-void VulkanPBR::PreparePipelines()
+void VulkanRender::PreparePipelines()
 {
 	VkPipelineInputAssemblyStateCreateInfo inputAssemblyStateCI{};
 	inputAssemblyStateCI.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -708,7 +680,7 @@ void VulkanPBR::PreparePipelines()
 	}
 }
 
-void VulkanPBR::GenerateBRDFLUT()
+void VulkanRender::GenerateBRDFLUT()
 {
 	// 开始时间
 	auto tStart = std::chrono::high_resolution_clock::now();
@@ -969,7 +941,7 @@ void VulkanPBR::GenerateBRDFLUT()
 	std::cout << "生成lut BRDF: " << tDiff << " 毫秒" << std::endl;
 }
 
-void VulkanPBR::GenerateCubemaps()
+void VulkanRender::GenerateCubemaps()
 {
 	enum Target { IRRADIANCE = 0, PREFILTEREDENV = 1 };
 
@@ -1531,7 +1503,7 @@ void VulkanPBR::GenerateCubemaps()
 	}
 }
 
-void VulkanPBR::PrepareUniformBuffers()
+void VulkanRender::PrepareUniformBuffers()
 {
 	for (auto& uniformBuffer : uniformBuffers)
 	{
@@ -1543,7 +1515,7 @@ void VulkanPBR::PrepareUniformBuffers()
 	UpdateUniformBuffers();
 }
 
-void VulkanPBR::UpdateUniformBuffers()
+void VulkanRender::UpdateUniformBuffers()
 {
 	// Scene
 	shaderValuesScene.projection = camera.matrices.perspective;
@@ -1571,7 +1543,7 @@ void VulkanPBR::UpdateUniformBuffers()
 	shaderValuesSkybox.model = glm::mat4(glm::mat3(camera.matrices.view));
 }
 
-void VulkanPBR::UpdateParams()
+void VulkanRender::UpdateParams()
 {
 	shaderValuesParams.lightDir = glm::vec4(
 		sin(glm::radians(lightSource.rotation.x)) * cos(glm::radians(lightSource.rotation.y)),
@@ -1580,7 +1552,7 @@ void VulkanPBR::UpdateParams()
 		0.0f);
 }
 
-void VulkanPBR::WindowResized()
+void VulkanRender::WindowResized()
 {
 	RecordCommandBuffers();
 	vkDeviceWaitIdle(device);
@@ -1588,7 +1560,7 @@ void VulkanPBR::WindowResized()
 	UpdateOverlay();
 }
 
-void VulkanPBR::Prepare()
+void VulkanRender::Prepare()
 {
 	VulkanBase::Prepare();
 
@@ -1648,7 +1620,7 @@ void VulkanPBR::Prepare()
 	prepared = true;
 }
 
-void VulkanPBR::UpdateOverlay()
+void VulkanRender::UpdateOverlay()
 {
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -1836,7 +1808,7 @@ void VulkanPBR::UpdateOverlay()
 	}
 }
 
-void VulkanPBR::Render()
+void VulkanRender::Render()
 {
 	if (!prepared)
 	{

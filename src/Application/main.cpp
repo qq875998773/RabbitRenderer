@@ -1,9 +1,8 @@
-#include "VulkanPBR.h"
-
+#include "VulkanRender.h"
 #include "VulkanObjModel.h"
 
 // vulankPBR渲染实例
-VulkanPBR* VulkanPBRRender;
+VulkanRender* VulkanPBRRender;
 
 /// @brief 窗口消息
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -23,12 +22,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 	////test.LoadModel("G:/c++/RabbitRenderer/data/models/OBJ/classroom/classroom.obj");
 	//test.LoadModel("G:/c++/RabbitRenderer/data/models/glTF/BrainStem/glTF/BrainStem.gltf");
 
-	for (int32_t i = 0; i < __argc; i++) 
-	{
-		VulkanPBR::args.push_back(__argv[i]);
-	}
-
-	VulkanPBRRender = new VulkanPBR();					// 新建vulkanPBR实例
+	VulkanPBRRender = new VulkanRender();				// 新建实例
 	VulkanPBRRender->InitVulkan();						// 初始化vulkan
 	VulkanPBRRender->SetupWindow(hInstance, WndProc);	// 设置窗体
 	VulkanPBRRender->Prepare();							// 准备渲染

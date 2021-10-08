@@ -74,7 +74,6 @@ struct MouseButtons
 class VulkanBase
 {
 public: 
-	static std::vector<const char*>			args;					// 命令行参数
 	bool									prepared = false;		// 准备渲染
 	uint32_t								width = 1280;			// 窗口宽
 	uint32_t								height = 720;			// 窗口高
@@ -98,6 +97,7 @@ public:
 	/// @param [in ] hinstance 窗口实例
 	/// @param [in ] wndproc 窗口消息
 	HWND SetupWindow(HINSTANCE hinstance, WNDPROC wndproc);
+
 	/// @brief 窗口消息处理
 	/// @param [in ] hWnd 窗口句柄
 	/// @param [in ] wParam 通常用来存储小段信息，如，标志
@@ -108,18 +108,24 @@ public:
 	void InitVulkan();
 
 	/// @brief 创建vulkan实例
-	virtual VkResult CreateInstance(bool enableValidation);
+	/// @param [in ] enableValidation 是否启动验证层
+	VkResult CreateInstance(const bool& enableValidation);
+
 	/// @brief 渲染
 	virtual void Render() = 0;
+
 	/// @brief 窗体大小调整 todo: 暂时为空
 	virtual void WindowResized() = 0;
-	/// @brief 设置帧缓冲区
-	virtual void SetupFrameBuffer();
-	/// @brief 准备渲染
-	virtual void Prepare();
 
-	/// @Brief 初始化交换链
+	/// @brief 设置帧缓冲区
+	void SetupFrameBuffer();
+
+	/// @brief 准备渲染
+	void Prepare();
+
+	/// @brief 初始化交换链
 	void InitSwapchain();
+
 	/// @brief 设置交换链
 	void SetupSwapChain();
 

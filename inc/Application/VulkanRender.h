@@ -46,6 +46,7 @@ struct UniformBufferSet
 	Buffer params;
 };
 
+/// @brief 统一缓冲区对象矩阵
 struct UBOMatrices
 {
 	glm::mat4 projection;
@@ -116,7 +117,7 @@ struct PushConstBlockMaterial
 };
 
 
-class VulkanPBR : public VulkanBase
+class VulkanRender : public VulkanBase
 {
 public:
 	Textures								textures;
@@ -152,8 +153,8 @@ public:
 	int32_t									debugViewEquation = 0;
 
 public:
-	VulkanPBR();
-	~VulkanPBR();
+	VulkanRender();
+	~VulkanRender();
 	
 	/// @brief 渲染节点
 	void RenderNode(vkglTF::Node* node, uint32_t cbIndex, vkglTF::Material::AlphaMode alphaMode);
