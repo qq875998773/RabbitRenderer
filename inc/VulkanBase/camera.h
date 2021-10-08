@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanBaseDef.h"
+
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
@@ -9,7 +11,7 @@
 
 
 /// @brief 摄像机类型
-enum class CameraType
+enum class DLLEXPORTCLASS CameraType
 {
 	lookat,			// 约束相机(相机绕点观察)
 	firstperson		// 第一人称相机(以相机为点观察)
@@ -34,7 +36,7 @@ struct SKey
 
 
 /// @brief 摄像机类
-class Camera
+class DLLEXPORTCLASS Camera
 {
 public:
 	CameraType	type;			// 设置相机 默认约束相机

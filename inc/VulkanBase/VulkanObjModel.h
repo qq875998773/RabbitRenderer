@@ -1,12 +1,14 @@
 #pragma once
 
+#include "VulkanBaseDef.h"
+
 #include <string>
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
 /// @brief ½âÎöobjÄ£ÐÍ
-class ImportModel
+class DLLEXPORTCLASS ImportModel
 {
 public:
 	ImportModel();

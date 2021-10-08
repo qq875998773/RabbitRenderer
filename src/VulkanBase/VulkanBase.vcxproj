@@ -37,7 +37,7 @@
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
@@ -58,10 +58,10 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(MSBuildProjectExtensionsPath)</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VulkanBase</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(OutDir)lib\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(OutDir)</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(MSBuildProjectExtensionsPath)</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">VulkanBase</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -101,7 +101,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;..\..\ThirdParty\Qt5.12.10\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -113,7 +113,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;_USE_MATH_DEFINES;NDEBUG;_CRT_SECURE_NO_WARNINGS;VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;_USE_MATH_DEFINES;NDEBUG;_CRT_SECURE_NO_WARNINGS;VK_USE_PLATFORM_WIN32_KHR;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -137,10 +137,10 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;..\..\ThirdParty\Qt5.12.10\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <CompileAs>Default</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
@@ -150,9 +150,9 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;_USE_MATH_DEFINES;NDEBUG;_CRT_SECURE_NO_WARNINGS;VK_USE_PLATFORM_WIN32_KHR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NOMINMAX;_USE_MATH_DEFINES;NDEBUG;_CRT_SECURE_NO_WARNINGS;VK_USE_PLATFORM_WIN32_KHR;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(OutDir)..\$(TargetName).pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;VK_USE_PLATFORM_WIN32_KHR;NOMINMAX;_USE_MATH_DEFINES;NDEBUG;PROJECT_PATH=\"E:/vulkan/Vulkan-glTF-PBR\";_CRT_SECURE_NO_WARNINGS;VK_EXAMPLE_DATA_DIR=\"E:/vulkan/Vulkan-glTF-PBR/data/\";CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -170,33 +170,39 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
     </Lib>
     <Link>
-      <ImportLibrary>$(OutDir)bin\$(TargetName).lib</ImportLibrary>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\ThirdParty\assimp\lib;..\..\ThirdParty\Qt5.12.10\msvc2017_64\lib;..\..\ThirdParty\vulkan;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;assimp-vc142-mt.lib;Qt5Gui.lib;Qt5Core.lib;Qt5Network.lib;Qt5Svg.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IncrementalLinkDatabaseFile />
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <OutputFile>$(OutDir)bin\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui.cpp" />
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="UI\QVulkanWindow.cpp" />
     <ClCompile Include="VulkanDevice.cpp" />
     <ClCompile Include="VulkanBase.cpp" />
     <ClCompile Include="VulkanglTFModel.cpp" />
     <ClCompile Include="VulkanObjModel.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
+    <ClCompile Include="VulkanTexture.cpp" />
+    <ClCompile Include="VulkanUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\inc\VulkanBase\camera.h" />
     <ClInclude Include="..\..\inc\VulkanBase\keycodes.hpp" />
     <ClInclude Include="..\..\inc\VulkanBase\macros.h" />
     <ClInclude Include="..\..\inc\VulkanBase\ui.hpp" />
+    <ClInclude Include="..\..\inc\VulkanBase\UI\QVulkanWindow.h" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanBaseDef.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanDevice.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanBase.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanglTFModel.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanObjModel.h" />
     <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.h" />
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.hpp" />
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.hpp" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.h" />
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

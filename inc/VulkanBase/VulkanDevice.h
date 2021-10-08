@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanBaseDef.h"
+
 #include <exception>
 #include <assert.h>
 #include <algorithm>
@@ -16,7 +18,7 @@ struct QueueFamilyIndices
 };
 
 
-class VulkanDevice
+class DLLEXPORTCLASS VulkanDevice
 {
 public:
 	VkPhysicalDevice						physicalDevice;					// 物理设备

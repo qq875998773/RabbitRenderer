@@ -118,7 +118,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\Application;..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\Application;..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;..\..\ThirdParty\Qt5.12.10\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -165,7 +165,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\inc\Application;..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\inc\Application;..\..\inc\VulkanBase;..\..\ThirdParty;..\..\ThirdParty\glm;..\..\ThirdParty\gli;..\..\ThirdParty\imgui;..\..\ThirdParty\tinygltf;..\..\ThirdParty\assimp\include;..\..\ThirdParty\Qt5.12.10\msvc2017_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>

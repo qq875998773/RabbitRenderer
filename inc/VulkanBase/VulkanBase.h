@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanBaseDef.h"
+
 #pragma comment(linker, "/subsystem:windows")
 #include <windows.h>
 #include <fcntl.h>
@@ -71,7 +73,7 @@ struct MouseButtons
 };
 
 /// @brief vulkan渲染基类
-class VulkanBase
+class DLLEXPORTCLASS VulkanBase
 {
 public: 
 	bool									prepared = false;		// 准备渲染

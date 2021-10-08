@@ -7,18 +7,6 @@
     <ClCompile Include="VulkanglTFModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ThirdParty\imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,6 +19,15 @@
     <ClCompile Include="VulkanObjModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UI\QVulkanWindow.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -38,6 +35,9 @@
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{C5FA9288-17B8-3828-BC2A-EA5C86C46876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{7eab44fc-5208-4e8a-86d9-46b68a1c5c9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,13 +65,19 @@
     <ClInclude Include="..\..\inc\VulkanBase\VulkanSwapChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.hpp">
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.hpp">
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\inc\VulkanBase\VulkanObjModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\VulkanBase\UI\QVulkanWindow.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\VulkanBase\VulkanBaseDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

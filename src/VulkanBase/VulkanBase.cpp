@@ -829,7 +829,7 @@ void VulkanBase::HandleMouseMove(int32_t x, int32_t y)
 	int32_t dx = (int32_t)mousePos.x - x;
 	int32_t dy = (int32_t)mousePos.y - y;
 
-	ImGuiIO& io = ImGui::GetIO();
+	/*ImGuiIO& io = ImGui::GetIO();
 	bool handled = io.WantCaptureMouse;
 
 	if (handled) 
@@ -842,7 +842,7 @@ void VulkanBase::HandleMouseMove(int32_t x, int32_t y)
 	{
 		mousePos = glm::vec2((float)x, (float)y);
 		return;
-	}
+	}*/
 
 	if (mouseButtons.left) 
 	{

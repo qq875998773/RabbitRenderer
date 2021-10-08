@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanBaseDef.h"
+
 #include <stdlib.h>
 #include <string>
 #include <assert.h>
@@ -17,7 +19,7 @@ typedef struct SwapChainBuffer
 };
 
 /// @brief vulkan½»»»Á´
-class VulkanSwapChain
+class DLLEXPORTCLASS VulkanSwapChain
 {
 public:
 	VkFormat										colorFormat;

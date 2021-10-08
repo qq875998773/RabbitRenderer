@@ -11,9 +11,9 @@
 
 #include <vulkan/vulkan.h>
 #include "VulkanBase.h"
-#include "VulkanTexture.hpp"
+#include "VulkanTexture.h"
 #include "VulkanglTFModel.h"
-#include "VulkanUtils.hpp"
+#include "VulkanUtils.h"
 #include "ui.hpp"
 
 #define GLM_FORCE_RADIANS
@@ -141,7 +141,7 @@ public:
 	bool									animate = true;
 	bool									displayBackground = true;
 	LightSource								lightSource;
-	UI*										ui;
+	//UI*										ui;
 	const std::string						assetpath = "../../data/";			// 资源路径 默认data文件夹
 	bool									rotateModel = false;
 	glm::vec3								modelrot = glm::vec3(0.0f);
@@ -207,7 +207,7 @@ public:
 	virtual void Prepare();
 	
 	/// @brief 更新ImGui用户界面
-	void UpdateOverlay();
+	//void UpdateOverlay();
 	
 	/// @brief 渲染
 	virtual void Render();

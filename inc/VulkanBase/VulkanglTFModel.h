@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VulkanBaseDef.h"
+
 #include <iostream>
 #include <stdlib.h>
 #include <string>
@@ -29,7 +31,7 @@ namespace vkglTF
 	struct Node;
 
 	// 外包
-	struct BoundingBox 
+	struct DLLEXPORTCLASS BoundingBox
 	{
 		glm::vec3			min;
 		glm::vec3			max;
@@ -51,7 +53,7 @@ namespace vkglTF
 	};
 
 	// 纹理
-	struct Texture 
+	struct DLLEXPORTCLASS Texture
 	{
 		VulkanDevice*			device;
 		VkImage					image;
@@ -118,7 +120,7 @@ namespace vkglTF
 	};
 
 	// 初始数据(模型原始信息)
-	struct Primitive 
+	struct DLLEXPORTCLASS Primitive
 	{
 		uint32_t	firstIndex;
 		uint32_t	indexCount;
@@ -132,7 +134,7 @@ namespace vkglTF
 	};
 
 	// 网格
-	struct Mesh 
+	struct DLLEXPORTCLASS Mesh
 	{
 		VulkanDevice*			device;
 		std::vector<Primitive*> primitives;
@@ -168,7 +170,7 @@ namespace vkglTF
 	};
 
 	// 节点
-	struct Node 
+	struct DLLEXPORTCLASS Node
 	{
 		Node*				parent;
 		uint32_t			index;
@@ -231,7 +233,7 @@ namespace vkglTF
 	};
 
 	// 模型
-	struct Model 
+	struct DLLEXPORTCLASS Model
 	{
 		VulkanDevice *device;
 
