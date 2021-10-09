@@ -66,120 +66,120 @@ VulkanBase::~VulkanBase()
 	vkDestroyInstance(instance, nullptr);
 }
 
-void VulkanBase::HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMsg)
-	{
-	case WM_CLOSE:						// 关闭
-		prepared = false;
-		DestroyWindow(hWnd);			// 消除指定句柄的窗口
-		PostQuitMessage(0);				// 退出程序
-		break;
-	case WM_PAINT:						// 更新窗体(当窗体被部分覆盖或者大小最大化最小化时发送此消息给windows)
-		ValidateRect(window, NULL);		// 更新指定窗口的无效矩形区域，使之有效.
-		break;
-	case WM_KEYDOWN:					// 键盘按下
-		switch (wParam)
-		{
-		case KEY_P:
-			paused = !paused;			// 更改刷新状态	
-			break;
-		case KEY_ESCAPE:
-			PostQuitMessage(0);			// 退出程序
-			break;
-		}
-
-		if (camera.type == CameraType::firstperson)
-		{
-			switch (wParam)
-			{
-			case KEY_W:
-				camera.keys.up = true;
-				break;
-			case KEY_S:
-				camera.keys.down = true;
-				break;
-			case KEY_A:
-				camera.keys.left = true;
-				break;
-			case KEY_D:
-				camera.keys.right = true;
-				break;
-			}
-		}
-
-		break;
-	case WM_KEYUP:						// 鼠标抬起
-		if (camera.type == CameraType::firstperson)
-		{
-			switch (wParam)
-			{
-			case KEY_W:
-				camera.keys.up = false;
-				break;
-			case KEY_S:
-				camera.keys.down = false;
-				break;
-			case KEY_A:
-				camera.keys.left = false;
-				break;
-			case KEY_D:
-				camera.keys.right = false;
-				break;
-			}
-		}
-		break;
-	case WM_LBUTTONDOWN:// 鼠标左键按下
-		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
-		mouseButtons.left = true;
-		break;
-	case WM_RBUTTONDOWN:// 鼠标右键按下
-		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
-		mouseButtons.right = true;
-		break;
-	case WM_MBUTTONDOWN:// 鼠标中键按下
-		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
-		mouseButtons.middle = true;
-		break;
-	case WM_LBUTTONUP:// 左键抬起
-		mouseButtons.left = false;
-		break;
-	case WM_RBUTTONUP:// 右键抬起
-		mouseButtons.right = false;
-		break;
-	case WM_MBUTTONUP:// 中键抬起
-		mouseButtons.middle = false;
-		break;
-	case WM_MOUSEWHEEL:// 鼠标滚轮
-	{
-		short wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-		camera.Translate(glm::vec3(0.0f, 0.0f, -(float)wheelDelta * 0.005f * camera.movementSpeed));
-		break;
-	}
-	case WM_MOUSEMOVE: // 鼠标移动
-	{
-		HandleMouseMove(LOWORD(lParam), HIWORD(lParam));
-		break;
-	}
-	case WM_SIZE:
-		if ((prepared) && (wParam != SIZE_MINIMIZED))
-		{
-			if ((m_bResizing) || ((wParam == SIZE_MAXIMIZED) || (wParam == SIZE_RESTORED)))
-			{
-				m_iDestWidth = LOWORD(lParam);
-				m_iDestHeight = HIWORD(lParam);
-				WindowResize();
-			}
-		}
-		break;
-	case WM_ENTERSIZEMOVE:
-		m_bResizing = true;
-		break;
-	case WM_EXITSIZEMOVE:
-		m_bResizing = false;
-		break;
-	}
-}
+//void VulkanBase::HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+//{
+//	switch (uMsg)
+//	{
+//	case WM_CLOSE:						// 关闭
+//		prepared = false;
+//		DestroyWindow(hWnd);			// 消除指定句柄的窗口
+//		PostQuitMessage(0);				// 退出程序
+//		break;
+//	case WM_PAINT:						// 更新窗体(当窗体被部分覆盖或者大小最大化最小化时发送此消息给windows)
+//		ValidateRect(window, NULL);		// 更新指定窗口的无效矩形区域，使之有效.
+//		break;
+//	case WM_KEYDOWN:					// 键盘按下
+//		switch (wParam)
+//		{
+//		case KEY_P:
+//			paused = !paused;			// 更改刷新状态	
+//			break;
+//		case KEY_ESCAPE:
+//			PostQuitMessage(0);			// 退出程序
+//			break;
+//		}
+//
+//		if (camera.type == CameraType::firstperson)
+//		{
+//			switch (wParam)
+//			{
+//			case KEY_W:
+//				camera.keys.up = true;
+//				break;
+//			case KEY_S:
+//				camera.keys.down = true;
+//				break;
+//			case KEY_A:
+//				camera.keys.left = true;
+//				break;
+//			case KEY_D:
+//				camera.keys.right = true;
+//				break;
+//			}
+//		}
+//
+//		break;
+//	case WM_KEYUP:						// 鼠标抬起
+//		if (camera.type == CameraType::firstperson)
+//		{
+//			switch (wParam)
+//			{
+//			case KEY_W:
+//				camera.keys.up = false;
+//				break;
+//			case KEY_S:
+//				camera.keys.down = false;
+//				break;
+//			case KEY_A:
+//				camera.keys.left = false;
+//				break;
+//			case KEY_D:
+//				camera.keys.right = false;
+//				break;
+//			}
+//		}
+//		break;
+//	case WM_LBUTTONDOWN:// 鼠标左键按下
+//		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
+//		mouseButtons.left = true;
+//		break;
+//	case WM_RBUTTONDOWN:// 鼠标右键按下
+//		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
+//		mouseButtons.right = true;
+//		break;
+//	case WM_MBUTTONDOWN:// 鼠标中键按下
+//		mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
+//		mouseButtons.middle = true;
+//		break;
+//	case WM_LBUTTONUP:// 左键抬起
+//		mouseButtons.left = false;
+//		break;
+//	case WM_RBUTTONUP:// 右键抬起
+//		mouseButtons.right = false;
+//		break;
+//	case WM_MBUTTONUP:// 中键抬起
+//		mouseButtons.middle = false;
+//		break;
+//	case WM_MOUSEWHEEL:// 鼠标滚轮
+//	{
+//		short wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+//		camera.Translate(glm::vec3(0.0f, 0.0f, -(float)wheelDelta * 0.005f * camera.movementSpeed));
+//		break;
+//	}
+//	case WM_MOUSEMOVE: // 鼠标移动
+//	{
+//		HandleMouseMove(LOWORD(lParam), HIWORD(lParam));
+//		break;
+//	}
+//	case WM_SIZE:
+//		if ((prepared) && (wParam != SIZE_MINIMIZED))
+//		{
+//			if ((m_bResizing) || ((wParam == SIZE_MAXIMIZED) || (wParam == SIZE_RESTORED)))
+//			{
+//				m_iDestWidth = LOWORD(lParam);
+//				m_iDestHeight = HIWORD(lParam);
+//				WindowResize();
+//			}
+//		}
+//		break;
+//	case WM_ENTERSIZEMOVE:
+//		m_bResizing = true;
+//		break;
+//	case WM_EXITSIZEMOVE:
+//		m_bResizing = false;
+//		break;
+//	}
+//}
 
 void VulkanBase::InitVulkan()
 {
@@ -260,6 +260,11 @@ void VulkanBase::InitVulkan()
 	assert(validDepthFormat);
 
 	swapChain.Connect(instance, physicalDevice, device);
+}
+
+VkInstance VulkanBase::GetVulkanInstance() const
+{
+	return instance;
 }
 
 VkResult VulkanBase::CreateInstance(const bool& enableValidation)
@@ -776,6 +781,106 @@ HWND VulkanBase::SetupWindow(HINSTANCE hinstance, WNDPROC wndproc)
 	return window;
 }
 
+void VulkanBase::SetupWindow(HINSTANCE hinstance)
+{
+	this->windowInstance = hinstance;
+
+	/*WNDCLASSEX wndClass;
+
+	wndClass.cbSize = sizeof(WNDCLASSEX);
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;
+	wndClass.lpfnWndProc = wndproc;
+	wndClass.cbClsExtra = 0;
+	wndClass.cbWndExtra = 0;
+	wndClass.hInstance = hinstance;
+	wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wndClass.lpszMenuName = NULL;
+	wndClass.lpszClassName = name.c_str();
+	wndClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
+
+	if (!RegisterClassEx(&wndClass))
+	{
+		std::cout << "无法注册窗口类!\n";
+		fflush(stdout);
+		exit(1);
+	}*/
+
+	/*int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+	if (settings.fullscreen)
+	{
+		DEVMODE dmScreenSettings;
+		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+		dmScreenSettings.dmPelsWidth = screenWidth;
+		dmScreenSettings.dmPelsHeight = screenHeight;
+		dmScreenSettings.dmBitsPerPel = 32;
+		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		if ((width != (uint32_t)screenWidth) && (height != (uint32_t)screenHeight))
+		{
+			if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+			{
+				if (MessageBox(NULL, "不支持全屏模式!\n切换到窗口模式?", "Error", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
+				{
+					settings.fullscreen = false;
+				}
+				else
+				{
+					return nullptr;
+				}
+			}
+		}
+	}
+
+	DWORD dwExStyle;
+	DWORD dwStyle;
+
+	if (settings.fullscreen)
+	{
+		dwExStyle = WS_EX_APPWINDOW;
+		dwStyle = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+	}
+	else
+	{
+		dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+		dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+	}
+
+	RECT windowRect;
+	windowRect.left = 0L;
+	windowRect.top = 0L;
+	windowRect.right = settings.fullscreen ? (long)screenWidth : (long)width;
+	windowRect.bottom = settings.fullscreen ? (long)screenHeight : (long)height;
+
+	AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);
+
+	window = CreateWindowEx(0, name.c_str(), title.c_str(), dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0,
+		windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
+		NULL, NULL, hinstance, NULL);
+
+	if (!settings.fullscreen)
+	{
+		uint32_t x = (GetSystemMetrics(SM_CXSCREEN) - windowRect.right) / 2;
+		uint32_t y = (GetSystemMetrics(SM_CYSCREEN) - windowRect.bottom) / 2;
+		SetWindowPos(window, 0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+	}
+
+	if (!window)
+	{
+		printf("无法创建窗口!\n");
+		fflush(stdout);
+		return nullptr;
+		exit(1);
+	}
+
+	ShowWindow(window, SW_SHOW);
+	SetForegroundWindow(window);
+	SetFocus(window);*/
+}
+
 void VulkanBase::RenderLoop()
 {
 	m_iDestWidth = width;
@@ -859,43 +964,43 @@ void VulkanBase::HandleMouseMove(int32_t x, int32_t y)
 	mousePos = glm::vec2((float)x, (float)y);
 }
 
-void VulkanBase::WindowResize()
-{
-	if (!prepared)
-	{
-		return;
-	}
-	prepared = false;
-
-	vkDeviceWaitIdle(device);
-	width = m_iDestWidth;
-	height = m_iDestHeight;
-	SetupSwapChain();
-
-	if (settings.multiSampling)
-	{
-		vkDestroyImageView(device, multisampleTarget.color.view, nullptr);
-		vkDestroyImage(device, multisampleTarget.color.image, nullptr);
-		vkFreeMemory(device, multisampleTarget.color.memory, nullptr);
-		vkDestroyImageView(device, multisampleTarget.depth.view, nullptr);
-		vkDestroyImage(device, multisampleTarget.depth.image, nullptr);
-		vkFreeMemory(device, multisampleTarget.depth.memory, nullptr);
-	}
-
-	vkDestroyImageView(device, depthStencil.view, nullptr);
-	vkDestroyImage(device, depthStencil.image, nullptr);
-	vkFreeMemory(device, depthStencil.mem, nullptr);
-
-	for (uint32_t i = 0; i < frameBuffers.size(); i++)
-	{
-		vkDestroyFramebuffer(device, frameBuffers[i], nullptr);
-	}
-
-	SetupFrameBuffer();
-	vkDeviceWaitIdle(device);
-
-	camera.UpdateAspectRatio((float)width / (float)height);
-	WindowResized();
-
-	prepared = true;
-}
+//void VulkanBase::WindowResize()
+//{
+//	if (!prepared)
+//	{
+//		return;
+//	}
+//	prepared = false;
+//
+//	vkDeviceWaitIdle(device);
+//	width = m_iDestWidth;
+//	height = m_iDestHeight;
+//	SetupSwapChain();
+//
+//	if (settings.multiSampling)
+//	{
+//		vkDestroyImageView(device, multisampleTarget.color.view, nullptr);
+//		vkDestroyImage(device, multisampleTarget.color.image, nullptr);
+//		vkFreeMemory(device, multisampleTarget.color.memory, nullptr);
+//		vkDestroyImageView(device, multisampleTarget.depth.view, nullptr);
+//		vkDestroyImage(device, multisampleTarget.depth.image, nullptr);
+//		vkFreeMemory(device, multisampleTarget.depth.memory, nullptr);
+//	}
+//
+//	vkDestroyImageView(device, depthStencil.view, nullptr);
+//	vkDestroyImage(device, depthStencil.image, nullptr);
+//	vkFreeMemory(device, depthStencil.mem, nullptr);
+//
+//	for (uint32_t i = 0; i < frameBuffers.size(); i++)
+//	{
+//		vkDestroyFramebuffer(device, frameBuffers[i], nullptr);
+//	}
+//
+//	SetupFrameBuffer();
+//	vkDeviceWaitIdle(device);
+//
+//	camera.UpdateAspectRatio((float)width / (float)height);
+//	WindowResized();
+//
+//	prepared = true;
+//}

@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "src\Application\Application.vcxproj", "{60733374-0890-39EF-904B-4B26D498222B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{625BAA85-4760-39AA-A20C-A8B7008F9479} = {625BAA85-4760-39AA-A20C-A8B7008F9479}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VulkanBase", "src\VulkanBase\VulkanBase.vcxproj", "{625BAA85-4760-39AA-A20C-A8B7008F9479}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{433B5106-D4CA-4575-9EA5-80C8BFE99D86}"
@@ -25,25 +20,39 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{433B
 		shaders\ui.vert = shaders\ui.vert
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "src\Application\Application.vcxproj", "{448699AD-277A-45B8-89CF-8409426BB7E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 		RelWithDebInfo|x64 = RelWithDebInfo|x64
+		RelWithDebInfo|x86 = RelWithDebInfo|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{60733374-0890-39EF-904B-4B26D498222B}.Debug|x64.ActiveCfg = Debug|x64
-		{60733374-0890-39EF-904B-4B26D498222B}.Debug|x64.Build.0 = Debug|x64
-		{60733374-0890-39EF-904B-4B26D498222B}.Release|x64.ActiveCfg = Release|x64
-		{60733374-0890-39EF-904B-4B26D498222B}.Release|x64.Build.0 = Release|x64
-		{60733374-0890-39EF-904B-4B26D498222B}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
-		{60733374-0890-39EF-904B-4B26D498222B}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Debug|x64.ActiveCfg = Debug|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Debug|x64.Build.0 = Debug|x64
+		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Debug|x86.ActiveCfg = Debug|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Release|x64.ActiveCfg = Release|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Release|x64.Build.0 = Release|x64
+		{625BAA85-4760-39AA-A20C-A8B7008F9479}.Release|x86.ActiveCfg = Release|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{625BAA85-4760-39AA-A20C-A8B7008F9479}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{625BAA85-4760-39AA-A20C-A8B7008F9479}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Debug|x64.ActiveCfg = Debug|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Debug|x64.Build.0 = Debug|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Debug|x86.ActiveCfg = Debug|Win32
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Debug|x86.Build.0 = Debug|Win32
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Release|x64.ActiveCfg = Release|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Release|x64.Build.0 = Release|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Release|x86.ActiveCfg = Release|Win32
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.Release|x86.Build.0 = Release|Win32
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|Win32
+		{448699AD-277A-45B8-89CF-8409426BB7E0}.RelWithDebInfo|x86.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

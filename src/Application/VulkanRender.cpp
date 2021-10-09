@@ -1823,7 +1823,7 @@ void VulkanRender::Render()
 	VkResult acquire = swapChain.AcquireNextImage(presentCompleteSemaphores[frameIndex], &currentBuffer);
 	if ((acquire == VK_ERROR_OUT_OF_DATE_KHR) || (acquire == VK_SUBOPTIMAL_KHR))
 	{
-		WindowResize();
+		//WindowResize();
 	}
 	else
 	{
@@ -1854,7 +1854,7 @@ void VulkanRender::Render()
 	{
 		if (present == VK_ERROR_OUT_OF_DATE_KHR)
 		{
-			WindowResize();
+			//WindowResize();
 			return;
 		}
 		else

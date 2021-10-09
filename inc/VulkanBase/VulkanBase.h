@@ -2,8 +2,8 @@
 
 #include "VulkanBaseDef.h"
 
-#pragma comment(linker, "/subsystem:windows")
-#include <windows.h>
+//#pragma comment(linker, "/subsystem:windows")
+//#include <windows.h>
 #include <fcntl.h>
 #include <io.h>
 
@@ -100,14 +100,19 @@ public:
 	/// @param [in ] wndproc 窗口消息
 	HWND SetupWindow(HINSTANCE hinstance, WNDPROC wndproc);
 
-	/// @brief 窗口消息处理
+	void SetupWindow(HINSTANCE hinstance);
+
+	/*/// @brief 窗口消息处理
 	/// @param [in ] hWnd 窗口句柄
 	/// @param [in ] wParam 通常用来存储小段信息，如，标志
 	/// @param [in ] lParam 通常用于存储消息所需的对象
-	void HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	void HandleMessages(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);*/
 
 	/// @brief 初始化vulkan
 	void InitVulkan();
+
+	/// @brief 获取vk实例
+	VkInstance GetVulkanInstance() const;
 
 	/// @brief 创建vulkan实例
 	/// @param [in ] enableValidation 是否启动验证层
@@ -116,8 +121,8 @@ public:
 	/// @brief 渲染
 	virtual void Render() = 0;
 
-	/// @brief 窗体大小调整 todo: 暂时为空
-	virtual void WindowResized() = 0;
+	/*/// @brief 窗体大小调整 todo: 暂时为空
+	virtual void WindowResized() = 0;*/
 
 	/// @brief 设置帧缓冲区
 	void SetupFrameBuffer();
@@ -168,6 +173,6 @@ protected:
 	std::string								title = "Rabbit-Renderer";			// vk程序抬头
 	std::string								name = "RabbitRenderer";			// vk应用程序注册名
 protected:
-	/// @brief 窗口大小改变处理
-	void WindowResize();
+	/*/// @brief 窗口大小改变处理
+	void WindowResize();*/
 };

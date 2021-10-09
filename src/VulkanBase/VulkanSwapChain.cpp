@@ -12,7 +12,7 @@ void VulkanSwapChain::InitSurface(void* platformHandle, void* platformWindow)
 	surfaceCreateInfo.hwnd = (HWND)platformWindow;
 	err = vkCreateWin32SurfaceKHR(m_instance, &surfaceCreateInfo, nullptr, &m_surface);
 
-	if (err != VK_SUCCESS) 
+	if (err != VK_SUCCESS)
 	{
 		std::cerr << "无法创建曲面!" << std::endl;
 		exit(err);
